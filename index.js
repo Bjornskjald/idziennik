@@ -1,6 +1,8 @@
 const 	fs = require('fs'),
 		cryptojs = require('crypto-js');
 
+const debug = false; // Jeżeli chcesz włączyć dodatkowe informację zmień "false" na "true"
+
 var data = JSON.parse(fs.readFileSync('./userdata.json', 'utf8')),
 	skiptoken = false;
 
