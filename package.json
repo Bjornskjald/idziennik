@@ -1,6 +1,6 @@
 {
   "name": "idziennik",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Moduł API iDziennika dla Node.js",
   "main": "index.js",
   "scripts": {
@@ -10,7 +10,11 @@
     "type": "git",
     "url": "https://github.com/Bjornskjald/idziennik"
   },
-  "keywords": ["portal edukacyjny", "idziennik", "api"],
+  "keywords": [
+    "portal edukacyjny",
+    "idziennik",
+    "api"
+  ],
   "author": "Bjornskjald",
   "license": "MIT",
   "dependencies": {
