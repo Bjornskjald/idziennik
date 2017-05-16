@@ -3,7 +3,8 @@ const 	fs = require('fs'),
 
 const debug = false; // Jeżeli chcesz włączyć dodatkowe informację zmień "false" na "true"
 
-var data = JSON.parse(fs.readFileSync('./userdata.json', 'utf8')),
+var datafile = fs.readFileSync('./userdata.json', 'utf8'),
+	data = typeof datafile === 'string' ? JSON.parse(datafile) : {},
 	skiptoken = false;
 
 const rp = require('request-promise').defaults({followAllRedirects: true});
