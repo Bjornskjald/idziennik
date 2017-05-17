@@ -11,7 +11,10 @@ const rp = require('request-promise').defaults({followAllRedirects: true});
 module.exports = {
 	login: (name, pass) => {
 		return new Promise((resolve, reject) => {
-			if(typeof name !== 'string' || typeof pass !== 'string') reject('Nieprawidłowa nazwa użytkownika/hasło');
+			if(typeof name !== 'string' || typeof pass !== 'string') {
+				reject('Nieprawidłowa nazwa użytkownika/hasło');
+				return;
+			}
 			if(data.hasOwnProperty(name)) {
 				if(debug) console.log('User istnieje');
 				if(typeof data[name].jar === 'undefined') {
