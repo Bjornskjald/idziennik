@@ -20,6 +20,8 @@ module.exports = {
 				}
 				if(data[name].hasOwnProperty('pass')) {
 					resolve(pass === data[name].pass ? {status: 'success'} : {status: 'Nieprawidłowa nazwa użytkownika/hasło'})
+				} else {
+					resolve({status: 'Użytkownik nie ma hasła.'})
 				}
 			} else {
 				// return {status: 'Nieprawidłowa nazwa użytkownika/hasło'}
@@ -189,7 +191,7 @@ module.exports = {
 		return data;
 	},
 	loadData: (loadedData) => {
-		if(typeof loadedData === 'object' && typeof data !== 'object'){
+		if(typeof loadedData === 'object' && JSON.stringify(data) === '{}'){
 			data = loadedData;
 		} else {
 			throw new Error('Błąd ładowania danych.')
@@ -290,7 +292,6 @@ function checkLoggedIn(name, pass){
 				if(debug) console.log('id jest & uzytkownik zalogowany');
 				resolve({status: 'success'})
 			} else {
-				if(debug) console.log('Pobieram ciastko')
 				getValidCookie(name, pass, response.body).then(() => {
 					if(debug) console.log('No, mam to ciastko');
 					resolve({status: 'success'})
