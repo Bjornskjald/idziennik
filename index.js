@@ -189,7 +189,7 @@ module.exports = {
 		return data;
 	},
 	loadData: (loadedData) => {
-		if(typeof loadedData === object && typeof data !== object){
+		if(typeof loadedData === 'object' && typeof data !== 'object'){
 			data = loadedData;
 		} else {
 			throw new Error('Błąd ładowania danych.')
