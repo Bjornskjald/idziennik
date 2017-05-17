@@ -490,7 +490,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				}
 			})
 		})
-	}
+}
 
 function crypto(name, password, hmac){
 	return cryptojs.HmacMD5(cryptojs.MD5(name.toLowerCase()+password).toString(cryptojs.enc.Hex), hmac).toString(cryptojs.enc.Hex);	
