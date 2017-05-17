@@ -1,6 +1,6 @@
 {
   "name": "idziennik",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "description": "Moduł API iDziennika dla Node.js",
   "main": "index.js",
   "scripts": {
