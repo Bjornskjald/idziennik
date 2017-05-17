@@ -27,6 +27,10 @@ module.exports = {
 				// return {status: 'Nieprawidłowa nazwa użytkownika/hasło'}
 				if(debug) console.log('User nie istnieje');
 				data[name] = {pass: pass};
+				if(typeof data[name].jar === 'undefined') {
+					if(debug) console.log('Tworze userowi ciasteczka')
+					data[name].jar = rp.jar();
+				}
 				checkLoggedIn(name, pass).then(result => {
 					if(result.status === 'success'){
 						resolve({status: 'success'})
@@ -39,9 +43,11 @@ module.exports = {
 	},
 	oceny: (name, pass) => {
 		return new Promise((resolve, reject) => {
+			if(debug) console.log('Pobieram oceny...')
 			if(typeof name !== 'string' || typeof pass !== 'string') resolve({status: 'Nieprawidłowe dane.'});
 			if(!data.hasOwnProperty(name) || !data[name].hasOwnProperty('pass')) resolve({status: 'Zaloguj się.'});
 			checkLoggedIn(name, pass).then(() => {
+				if(debug) console.log('Jest ciastko, pobieram...')
 				rp({
 					uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/oceny/WS_ocenyUcznia.asmx/pobierzOcenyUcznia',
 					body: {idPozDziennika: data[name].id}, json: true, method: 'POST',
@@ -204,8 +210,11 @@ function crypto(name, password, hmac){
 }
 
 function getValidCookie(name, pass, lastbody){
+	if(debug) console.log('name: '+name)
+	if(debug) console.log('pass: '+pass)
 	return new Promise((resolve, reject) => {
 		if(!lastbody.includes('" name="token" value="')){
+			if(debug) console.log('Nie mam tokena, probuje pobrac')
 			try {
 				var formdata = {passworddata: crypto(name, pass, lastbody.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
 			}
@@ -215,6 +224,7 @@ function getValidCookie(name, pass, lastbody){
 				return
 			}
 		} else {
+			if(debug) console.log('Mam token, ide dalej')
 			var formdata = {}
 			data[name].token = lastbody.split('token" value')[1].split('\"')[1]
 			skiptoken = true
@@ -228,7 +238,8 @@ function getValidCookie(name, pass, lastbody){
 				try {
 					if(typeof body.split('token\" value')[1] === 'undefined'){
 						//data[name].pass = ''
-						console.info(body)
+						//console.log(body)
+						if(body.includes('504')) console.log('Nieprawidłowe hasło.')
 						reject('Failed on login. (token undefined)')
 						return
 					}
