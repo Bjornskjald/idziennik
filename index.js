@@ -186,7 +186,7 @@ module.exports = {
 		})
 	},
 	getData: () => {
-		return JSON.stringify(data);
+		return data;
 	},
 	loadData: (loadedData) => {
 		if(typeof loadedData === object && typeof data !== object){
