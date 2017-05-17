@@ -24,6 +24,7 @@ const idziennik = require('idziennik')
 ### Funkcje:
 
 Wszystkie funkcje zwracają obiekt z danymi pobranymi z API
+
 Schematy obiektów znajdują się w folderze docs/
 
 #### Logowanie:
@@ -62,7 +63,7 @@ client.plan(new Date()).then(result => {
 
 ```javascript
 client.odbiorcy().then(result => {
-	console.log(result);
+	// ...
 })
 ```
 
@@ -71,7 +72,7 @@ client.odbiorcy().then(result => {
 ```javascript
 // typeof messageID === 'string' && messageID.length === 16
 client.wiadomosc(messageID).then(result => { 
-	console.log(result);
+	// ...
 })
 ```
 
@@ -80,7 +81,7 @@ client.wiadomosc(messageID).then(result => {
 ```javascript
 // typeof idJednostki === 'number'
 client.pracownicyJednostki(idJednostki).then(result => {
-	console.log(result); // {status: 'success', data: {d: {...}}}
+	// ...
 })
 ```
 
@@ -88,7 +89,7 @@ client.pracownicyJednostki(idJednostki).then(result => {
 
 ```javascript
 client.odebrane().then(result => {
-	console.log(result); // {status: 'success', data: {d: {...}}}
+	// ...
 })
 ```
 
@@ -96,7 +97,7 @@ client.odebrane().then(result => {
 
 ```javascript
 client.wyslane().then(result => {
-	console.log(result);
+	// ...
 })
 ```
 
