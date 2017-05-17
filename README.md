@@ -1,16 +1,14 @@
 # idziennik
 ## Moduł API iDziennika dla Node.js
 
-Aplikacja domyślnie używa pliku "userdata.json" w katalogu głównym do zapisywania/odczytywania danych
-
 ### Instalacja
 
-#### Wersja stabilna:
+##### Wersja stabilna:
 ```
 npm install idziennik
 ```
 
-#### Najnowsza wersja:
+##### Najnowsza wersja:
 ```
 npm install Bjornskjald/idziennik
 ```
