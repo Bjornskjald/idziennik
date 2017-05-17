@@ -3,6 +3,18 @@
 
 Aplikacja domyślnie używa pliku "userdata.json" w katalogu głównym do zapisywania/odczytywania danych
 
+### Instalacja
+
+#### Wersja stabilna:
+```
+npm install idziennik
+```
+
+#### Najnowsza wersja:
+```
+npm install Bjornskjald/idziennik
+```
+
 ### Używanie:
 
 ```javascript
