@@ -64,7 +64,7 @@ module.exports = {
 			if(!data.hasOwnProperty(name) || !data[name].hasOwnProperty('pass')) resolve({status: 'Zaloguj się.'});
 			checkLoggedIn(name, pass).then(() => {
 				rp({
-					uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/oceny/WS_ocenyUcznia.asmx/pobierzOcenyUcznia',
+					uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/uwagi/WS_uwagiUcznia.asmx/pobierzUwagiUcznia',
 					body: {idPozDziennika: data[name].id}, json: true, method: 'POST',
 					jar: data[name].jar, resolveWithFullResponse: true
 				}).then(response => {
