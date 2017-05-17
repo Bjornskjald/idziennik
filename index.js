@@ -1,10 +1,9 @@
 const 	fs = require('fs'),
 		cryptojs = require('crypto-js');
 
-const debug = false; // Jeżeli chcesz włączyć dodatkowe informację zmień "false" na "true"
+const debug = false; // Jeżeli chcesz włączyć dodatkowe informacje zmień "false" na "true"
 
-var datafile = fs.readFileSync('./userdata.json', 'utf8'),
-	data = typeof datafile === 'string' ? JSON.parse(datafile) : {},
+var data = {},
 	skiptoken = false;
 
 const rp = require('request-promise').defaults({followAllRedirects: true});
@@ -186,10 +185,15 @@ module.exports = {
 			})
 		})
 	},
-	save: () => {
-		data.saved = true;
-		if(debug) console.log('Saving...')
-		fs.writeFileSync('./userdata.json', JSON.stringify(data), 'utf8')
+	getData: () => {
+		return JSON.stringify(data);
+	},
+	loadData: (loadedData) => {
+		if(typeof loadedData === object && typeof data !== object){
+			data = loadedData;
+		} else {
+			throw new Error('Błąd ładowania danych.')
+		}
 	}
 }
 

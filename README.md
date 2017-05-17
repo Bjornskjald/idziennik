@@ -10,72 +10,77 @@ const idziennik = require('idziennik')
 ```
 
 ### Funkcje:
-#### Wszystkie funkcje zwracają obiekt ze statusem (oraz danymi pobranymi z API)
 
+Wszystkie funkcje zwracają obiekt ze statusem (oraz danymi pobranymi z API)
+
+#### Logowanie:
 ```javascript
-// Przykładowe logowanie
 idziennik.login('nazwaUzytkownika', 'haslo').then(result => {
 	console.log(result) // {status: 'success'}
 })
 ```
 
+#### Pobieranie ocen
 ```javascript
-// Pobieranie ocen
 idziennik.oceny('nazwaUzytkownika', 'haslo').then(result => {
 	console.log(result) // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie uwag
 ```javascript
-// Pobieranie uwag
 idziennik.uwagi('nazwaUzytkownika', 'haslo').then(result => {
 	console.log(result) // {status: 'success', data: {d: {...}}}
 })
 ```
-
+#### Pobieranie planu lekcji
 ```javascript
-// Pobieranie planu lekcji
 idziennik.plan('nazwaUzytkownika', 'haslo', new Date()).then(result => {
 	console.log(result) // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie dostępnych odbiorców wiadomości na komunikatorze
 ```javascript
-// Pobieranie dostępnych odbiorców wiadomości na komunikatorze
 idziennik.odbiorcy('nazwaUzytkownika', 'haslo').then(result => {
 	console.log(result) // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie pojedynczej wiadomości z komunikatora
 ```javascript
-// Pobieranie pojedynczej wiadomości z komunikatora
 idziennik.wiadomosc('nazwaUzytkownika', 'haslo', messageID).then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie listy pracowników danej jednostki
 ```javascript
-// Pobieranie listy pracowników danej jednostki
 idziennik.pracownicyJednostki('nazwaUzytkownika', 'haslo', idJednostki).then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie listy odebranych wiadomości na komunikatorze
 ```javascript
-// Pobieranie listy odebranych wiadomości na komunikatorze
 idziennik.odebrane('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Pobieranie listy wysłanych wiadomości na komunikatorze
 ```javascript
-// Pobieranie listy wysłanych wiadomości na komunikatorze
 idziennik.wyslane('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
+#### Otrzymanie danych do zapisania (ciastka, tokeny)
 ```javascript
-// Zapisywanie danych przy wyłączaniu aplikacji do pliku userdata.json
-idziennik.save()
+idziennik.getData(); // {'nazwaUzytkownika': {'pass': 'haslo', 'token': 'aAbBcCdDeEfFgGhH', 'jar': {...}}}
+```
+
+#### Ładowanie danych aplikacji otrzymanych przy użyciu funkcji getData()
+```javascript
+idziennik.loadData(data);
 ```
