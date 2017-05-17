@@ -23,76 +23,84 @@ const idziennik = require('idziennik')
 
 ### Funkcje:
 
-Wszystkie funkcje zwracają obiekt ze statusem (oraz danymi pobranymi z API)
+Wszystkie funkcje zwracają obiekt z danymi pobranymi z API
+Schematy obiektów znajdują się w folderze docs/
 
 #### Logowanie:
 ```javascript
-idziennik.login('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success'}
+idziennik({username: 'nazwaUzytkownika', password: 'haslo'}).then(client => {
+	// Funkcje klienta poniżej
 })
 ```
 
-#### Pobieranie ocen
+#### client.oceny
+
 ```javascript
-idziennik.oceny('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+client.oceny().then(result => {
+	console.log(result)
 })
 ```
 
-#### Pobieranie uwag
+
+#### client.uwagi
+
 ```javascript
-idziennik.uwagi('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
-})
-```
-#### Pobieranie planu lekcji
-```javascript
-idziennik.plan('nazwaUzytkownika', 'haslo', new Date()).then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+client.uwagi().then(result => {
+	console.log(result);
 })
 ```
 
-#### Pobieranie dostępnych odbiorców wiadomości na komunikatorze
+#### client.plan
+
 ```javascript
-idziennik.odbiorcy('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result) // {status: 'success', data: {d: {...}}}
+client.plan(new Date()).then(result => {
+	console.log(result);
 })
 ```
 
-#### Pobieranie pojedynczej wiadomości z komunikatora
+#### client.odbiorcy
+
 ```javascript
-idziennik.wiadomosc('nazwaUzytkownika', 'haslo', messageID).then(result => {
+client.odbiorcy().then(result => {
+	console.log(result);
+})
+```
+
+#### client.wiadomosc
+
+```javascript
+// typeof messageID === 'string' && messageID.length === 16
+client.wiadomosc(messageID).then(result => { 
+	console.log(result);
+})
+```
+
+#### client.pracownicyJednostki
+
+```javascript
+// typeof idJednostki === 'number'
+client.pracownicyJednostki(idJednostki).then(result => {
 	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
-#### Pobieranie listy pracowników danej jednostki
+#### client.odebrane
+
 ```javascript
-idziennik.pracownicyJednostki('nazwaUzytkownika', 'haslo', idJednostki).then(result => {
+client.odebrane().then(result => {
 	console.log(result); // {status: 'success', data: {d: {...}}}
 })
 ```
 
-#### Pobieranie listy odebranych wiadomości na komunikatorze
+#### client.wyslane
+
 ```javascript
-idziennik.odebrane('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result); // {status: 'success', data: {d: {...}}}
+client.wyslane().then(result => {
+	console.log(result);
 })
 ```
 
-#### Pobieranie listy wysłanych wiadomości na komunikatorze
+#### Otrzymanie danych do wczytania (TODO)
 ```javascript
-idziennik.wyslane('nazwaUzytkownika', 'haslo').then(result => {
-	console.log(result); // {status: 'success', data: {d: {...}}}
-})
-```
-
-#### Otrzymanie danych do zapisania (ciastka, tokeny)
-```javascript
-idziennik.getData(); // {'nazwaUzytkownika': {'pass': 'haslo', 'token': 'aAbBcCdDeEfFgGhH', 'jar': {...}}}
-```
-
-#### Ładowanie danych aplikacji otrzymanych przy użyciu funkcji getData()
-```javascript
-idziennik.loadData(data);
+client.getAppState(); 
 ```
