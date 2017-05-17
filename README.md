@@ -18,7 +18,7 @@ npm install Bjornskjald/idziennik
 ### Używanie:
 
 ```javascript
-const idziennik = require('idziennik')
+const idziennik = require('idziennik');
 ```
 
 ### Funkcje:
@@ -38,7 +38,7 @@ idziennik({username: 'nazwaUzytkownika', password: 'haslo'}).then(client => {
 
 ```javascript
 client.oceny().then(result => {
-	console.log(result)
+	// ...
 })
 ```
 
@@ -47,7 +47,7 @@ client.oceny().then(result => {
 
 ```javascript
 client.uwagi().then(result => {
-	console.log(result);
+	// ...
 })
 ```
 
@@ -55,7 +55,7 @@ client.uwagi().then(result => {
 
 ```javascript
 client.plan(new Date()).then(result => {
-	console.log(result);
+	// ...
 })
 ```
 
