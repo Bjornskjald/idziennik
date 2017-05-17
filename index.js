@@ -48,7 +48,7 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.uwagi = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -62,7 +62,7 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.plan = (date) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -76,7 +76,7 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.odbiorcy = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -90,7 +90,7 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.wiadomosc = (id) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -104,7 +104,7 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.pracownicyJednostki = (idjednostki) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -118,11 +118,11 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
 	this.odebrane = () => {
 		return new Promise((resolve, reject) => {
 			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci ',
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci',
 				body: {
 					param: {
 						strona: 1,
@@ -143,11 +143,11 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
-	this.wyslane = (name, pass) => {
+	};
+	this.wyslane = () => {
 		return new Promise((resolve, reject) => {
 			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci ',
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci',
 				body: {
 					param: {
 						strona: 1,
@@ -168,10 +168,241 @@ function Client(name, jar, id){
 				reject(err);
 			})
 		})
-	},
+	};
+	this.wyslij = (odbiorca, temat, tresc, potwierdzenie) => {
+		function guid() {
+			function s4() {
+			return Math.floor((1 + Math.random()) * 0x10000)
+				.toString(16)
+				.substring(1);
+			}
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+		}
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/WyslijWiadomosc',
+				body: {
+					Wiadomosc: {
+						"Tytul": temat,
+						"Tresc": tresc,
+						"Confirmation": potwierdzenie,
+						"GuidMessage": guid(),
+						"Odbiorcy": typeof potwierdzenie === 'string' ? [potwierdzenie] : potwierdzenie
+					}
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.obecnosci = (date) => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/obecnosci/WS_obecnosciUcznia.asmx/pobierzObecnosciUcznia',
+				body: {idPozDziennika: this.id, mc: date.getMonth+1, rok: date.getFullYear(), dataTygodnia: null},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.praceDomowe = () => {
+		function formatDate() {
+			var d = new Date(),
+				month = '' + (d.getMonth() + 1),
+				day = '' + d.getDate(),
+				year = d.getFullYear();
+
+			if (month.length < 2) month = '0' + month;
+			if (day.length < 2) day = '0' + day;
+
+			return [year, month, day].join('-');
+		}
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzPraceDomowe',
+				body: {
+					param : {
+						strona: 1,
+						iloscNaStrone: 999,
+						iloscRekordow: -1,
+						kolumnaSort: "DataZadania",
+						kierunekSort: 0,
+						maxIloscZaznaczonych: 0,
+						panelFiltrow: 0,
+						parametryFiltrow: null
+					}, 
+					idP: this.id, 
+					data: formatDate(), 
+					wszystkie: true 
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.pracaDomowa = (id) => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzJednaPraceDomowa',
+				body: {idP: this.id, idPD: id},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.sprawdziany = (date) => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/sprawdziany/mod_sprawdzianyPanel.asmx/pobierzListe',
+				body: {
+					'param': {
+						"strona":1,
+						"iloscNaStrone":99,
+						"iloscRekordow":-1,
+						"kolumnaSort":"ss.Nazwa,sp.Data_sprawdzianu",
+						"kierunekSort":0,
+						"maxIloscZaznaczonych":0,
+						"panelFiltrow":0,
+						"parametryFiltrow":null
+					}, 
+					idP: this.id, 
+					miesiac: (date.getMonth()+1).toString(), 
+					rok: date.getFullYear().toString()
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.brakujaceOceny = () => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/brak_ocen/WS_BrakOcenUcznia.asmx/pobierzBrakujaceOcenyUcznia',
+				body: {idPozDziennika: this.id},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.wydarzenia = () => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWydarzeniaUcznia',
+				body: {
+					param: {
+						strona: 1,
+						iloscNaStrone: 999, 
+						iloscRekordow: -1,
+						kolumnaSort: "Data",
+						kierunekSort: 1,
+						maxIloscZaznaczonych: 0,
+						panelFiltrow: 0,
+						parametryFiltrow: null
+					},
+					idP: this.id
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.wycieczki = () => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWycieczkiUcznia',
+				body: {
+					param: {
+						strona: 1,
+						iloscNaStrone: 999, 
+						iloscRekordow: -1,
+						kolumnaSort: "Data",
+						kierunekSort: 1,
+						maxIloscZaznaczonych: 0,
+						panelFiltrow: 0,
+						parametryFiltrow: null
+					},
+					idP: this.id
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.egzaminy = () => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzOkeUcznia',
+				body: {idP: this.id},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
+	this.podreczniki = () => {
+		return new Promise((resolve, reject) => {
+			rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Podreczniki/WS_podreczniki.asmx/pobierzPodreczniki',
+				body: {
+					param: {
+						strona: 1,
+						iloscNaStrone: 999, 
+						iloscRekordow: -1,
+						kolumnaSort: "Nazwa",
+						kierunekSort: 0,
+						maxIloscZaznaczonych: 0,
+						panelFiltrow: 0,
+						parametryFiltrow: null
+					},
+					idP: this.id
+				},
+				json: true, method: 'POST',
+				jar: this.jar
+			}).then(response => {
+				resolve(response.d);
+			}).catch(err => {
+				reject(err);
+			})
+		})
+	};
 	this.getAppState = () => {
 		return {id: this.id, jar: this.jar, name: this.name}
-	}
+	};
 }
 
 function checkLoggedIn(name, pass, importedjar, importedid) {

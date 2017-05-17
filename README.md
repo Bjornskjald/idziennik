@@ -70,7 +70,7 @@ client.odbiorcy().then(result => {
 #### client.wiadomosc
 
 ```javascript
-// typeof messageID === 'string' && messageID.length === 16
+// typeof messageID === 'string' && messageID.length === 15
 client.wiadomosc(messageID).then(result => { 
 	// ...
 })
@@ -101,7 +101,95 @@ client.wyslane().then(result => {
 })
 ```
 
+#### client.wyslij
+
+```javascript
+// typeof odbiorca === 'string'
+// typeof temat === 'string'
+// typeof tresc === 'string'
+// typeof potwierdzenie === 'boolean'
+client.wyslij(odbiorca, temat, tresc, potwierdzenie).then(result => {
+	// ...
+})
+```
+
+#### client.obecnosci
+
+```javascript
+client.obecnosci(new Date()).then(result => {
+	// ...
+})
+```
+
+#### client.praceDomowe
+
+```javascript
+client.praceDomowe().then(result => {
+	// ...
+})
+```
+
+#### client.pracaDomowa
+
+```javascript
+// typeof IDPracy === 'number'
+client.pracaDomowa(IDPracy).then(result => {
+	// ...
+})
+```
+
+#### client.sprawdziany
+
+```javascript
+client.sprawdziany(new Date()).then(result => {
+	// ...
+})
+```
+
+#### client.brakujaceOceny
+
+```javascript
+client.brakujaceOceny().then(result => {
+	// ...
+})
+```
+
+#### client.wydarzenia
+
+```javascript
+client.wydarzenia().then(result => {
+	// ...
+})
+```
+
+#### client.wycieczki
+
+```javascript
+client.wycieczki().then(result => {
+	// ...
+})
+```
+
+#### client.egzaminy
+
+```javascript
+client.egzaminy().then(result => {
+	// ...
+})
+```
+
+#### client.podreczniki
+
+```javascript
+client.podreczniki().then(result => {
+	// ...
+})
+```
+
+
+
 #### Otrzymanie danych do wczytania (TODO)
 ```javascript
 client.getAppState(); 
 ```
+
