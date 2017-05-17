@@ -1,6 +1,8 @@
 # idziennik
 ## Moduł API iDziennika dla Node.js
 
+### Uwaga! Moduł działa tylko z dziennikiem na Portalu Edukacyjnym (pe.szczecin.pl)!
+
 ### Instalacja
 
 ##### Wersja stabilna:
