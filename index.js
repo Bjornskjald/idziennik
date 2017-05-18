@@ -405,90 +405,81 @@ function Client(name, jar, id){
 }
 
 function checkLoggedIn(name, pass, importedjar, importedid) {
-		return new Promise((resolve, reject) => {
-			var jar = typeof importedjar === 'object' ? importedjar : rp.jar()
-			var loggedInWithAppState = typeof importedjar === 'object'
-			rp({
-				uri: 'https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
-				jar: jar, resolveWithFullResponse: true
-			}).then(response => {
-				if(debug) console.log(response.request.href)
-				if(response.request.href === 'https://sisso.pe.szczecin.pl/Default.aspx' || response.body.includes('token" value="')){
-					if(debug) console.log('id jest & uzytkownik zalogowany');
-					resolve({jar: jar})
-				} else {
-					if(loggedInWithAppState){
-						reject(new Error('Cookie expired.'))
-						return
-					}
-					var skiptoken = false;
-					if(!response.body.includes('" name="token" value="')){
-						if(debug) console.log('Nie mam tokena, probuje pobrac')
-						try {
-							var formdata = {passworddata: crypto(name, pass, response.body.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
-						}
-						catch(err) {
-							reject(err)
-							return
-						}
-					} else {
-						if(debug) console.log('Mam token, ide dalej')
-						var formdata = {}
-						var token = response.body.split('token" value')[1].split('\"')[1]
-						skiptoken = true
-					}
-
-					rp({
-						uri: 'https://pe.szczecin.pl/chapter_201208.asp',
-						method: 'POST', form: formdata, jar: jar
-					}).then(body => {
-						if(!skiptoken){
-							if(typeof body.split('token\" value')[1] === 'undefined'){
-								if(body.includes('504')){
-									reject(new Error('Incorrect password.'))
-									return
-								} else {
-									reject(new Error('Unknown error.'))
-									return
-								}
-							}
-							var token = body.split('token" value')[1].split('\"')[1]
-							if(debug) console.log(token);
-						} else {
-							skiptoken = false;
-						}
-						rp({
-							uri: 'https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
-							method: 'POST', form: {token: token}, jar: jar
-						}).then(body => {
-							if(!body.includes(name.toUpperCase())){
-								reject(new Error('Failed on logging in.'))
-								return
-							}
-							rp({
-								uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx',
-								jar: jar
-							}).then(body => {
-								var wres = body.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
-								rp({
-									uri: 'https://iuczniowie.pe.szczecin.pl/Default.aspx',
-									form: {wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'},
-									method: 'POST', jar: jar, resolveWithFullResponse: true
-								}).then(response => {
-									if(debug) console.log(response.request.uri.pathname)
-									if(response.request.uri.pathname !== '/mod_panelRodzica/Oceny.aspx'){
-										reject('Failed on scraping main page.')
-										return
-									}
-									if(debug) console.log('Skończyłem pobierać ciastko')
-									resolve({jar: jar, id: response.body.split('selected="selected" value="')[1].split('">')[0]})
-								})
-							})
-						})
-					})
+	return new Promise((resolve, reject) => {
+		var jar = typeof importedjar === 'object' ? importedjar : rp.jar()
+		var loggedInWithAppState = typeof importedjar === 'object'
+		rp({
+			uri: 'https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
+			jar: jar, resolveWithFullResponse: true
+		}).then(response => {
+			if(debug) console.log(response.request.href)
+			if(response.request.href === 'https://sisso.pe.szczecin.pl/Default.aspx' || response.body.includes('token" value="')){
+				if(debug) console.log('id jest & uzytkownik zalogowany');
+				resolve({jar: jar})
+				return
+			}
+			if(loggedInWithAppState){
+				reject(new Error('Cookie expired.'))
+				return
+			}
+			if(!response.body.includes('" name="token" value="')){
+				if(debug) console.log('Nie mam tokena, probuje pobrac')
+				try {
+					var formdata = {passworddata: crypto(name, pass, response.body.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
 				}
+				catch(err) {
+					reject(err)
+					return
+				}
+			} else {
+				if(debug) console.log('Mam token, ide dalej')
+				var formdata = {}
+				jar.token = response.body.split('token" value')[1].split('\"')[1]
+			}
+			return rp({
+				uri: 'https://pe.szczecin.pl/chapter_201208.asp',
+				method: 'POST', form: formdata, jar: jar
 			})
+		}).then(body => {
+			if(typeof jar.token !== 'string'){
+				if(body.includes('504')){
+					reject(new Error('Incorrect password.'))
+					return
+				}
+				jar.token = body.split('token" value')[1].split('\"')[1]
+				if(debug) console.log(jar.token);
+			}
+			return rp({
+				uri: 'https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
+				method: 'POST', form: {token: jar.token}, jar: jar
+			})
+		}).then(body => {
+			delete jar.token
+			if(!body.includes(name.toUpperCase())){
+				reject(new Error('Failed on logging in.'))
+				return
+			}
+			return rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx',
+				jar: jar
+			})
+		}).then(body => {
+			var wres = body.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
+			return rp({
+				uri: 'https://iuczniowie.pe.szczecin.pl/Default.aspx',
+				form: {wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'},
+				method: 'POST', jar: jar, resolveWithFullResponse: true
+			})
+		}).then(response => {
+			if(debug) console.log(response.request.uri.pathname)
+			if(response.request.uri.pathname !== '/mod_panelRodzica/Oceny.aspx'){
+				reject('Failed on scraping main page.')
+				return
+			}
+			if(debug) console.log('Skończyłem pobierać ciastko')
+			resolve({jar: jar, id: response.body.split('selected="selected" value="')[1].split('">')[0]})
 		})
+	})
 }
 
 function crypto(name, password, hmac){
