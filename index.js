@@ -2,7 +2,7 @@ const cryptojs = require('crypto-js');
 
 const debug = false; // Jeżeli chcesz włączyć dodatkowe informacje zmień "false" na "true"
 
-const rp = require('request-promise').defaults({followAllRedirects: true});
+const rp = require('request-promise-native').defaults({followAllRedirects: true});
 
 module.exports = (object) => {
 	return new Promise((resolve, reject) => {
