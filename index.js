@@ -1,5 +1,4 @@
-const 	fs = require('fs'),
-		cryptojs = require('crypto-js');
+const cryptojs = require('crypto-js');
 
 const debug = false; // Jeżeli chcesz włączyć dodatkowe informacje zmień "false" na "true"
 
