@@ -443,8 +443,8 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 		}).then(body => {
 			if(typeof jar.token !== 'string'){
 				if(body.includes('504')){
-					reject(new Error('Incorrect password.'))
-					return
+					reject()
+					throw new Error('Incorrect password.')
 				}
 				jar.token = body.split('token" value')[1].split('\"')[1]
 				if(debug) console.log(jar.token);
@@ -454,6 +454,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				method: 'POST', form: {token: jar.token}, jar: jar
 			})
 		}).then(body => {
+			console.log('idzie dalej?')
 			delete jar.token
 			if(!body.includes(name.toUpperCase())){
 				reject(new Error('Failed on logging in.'))
