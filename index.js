@@ -454,11 +454,10 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				method: 'POST', form: {token: jar.token}, jar: jar
 			})
 		}).then(body => {
-			console.log('idzie dalej?')
 			delete jar.token
 			if(!body.includes(name.toUpperCase())){
-				reject(new Error('Failed on logging in.'))
-				return
+				reject()
+				throw new Error('Failed on logging in.')
 			}
 			return rp({
 				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx',
