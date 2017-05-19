@@ -4,12 +4,12 @@ const rp = require('request-promise-native').defaults({followAllRedirects: true}
 
 module.exports = (object) => {
 	return new Promise((resolve, reject) => {
+		if(typeof object.debug === 'boolean'){
+			const debug = object.debug
+		}
 		if(typeof object !== 'object'){ // Jeżeli główny obiekt nie jest obiektem
 			if(debug) console.log('Format ze starej wersji.');
 			reject(new Error('Nieprawidłowy format danych.'))
-		}
-		if(typeof object.debug === 'boolean'){
-			const debug = object.debug
 		}
 		if(typeof object.username !== 'string' || typeof object.password !== 'string') { // Jeżeli nazwa i hasło nie są stringami
 			/*if(typeof object.appstate === 'object'){ // Jeżeli jest podany appstate
