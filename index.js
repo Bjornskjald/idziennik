@@ -2,10 +2,15 @@ const cryptojs = require('crypto-js');
 
 const rp = require('request-promise-native').defaults({followAllRedirects: true});
 
+var debug
+
 module.exports = (object) => {
 	return new Promise((resolve, reject) => {
 		if(typeof object.debug === 'boolean'){
-			const debug = object.debug
+			debug = object.debug
+			console.log('Tryb debugowania włączony')
+		} else {
+			debug = false
 		}
 		if(typeof object !== 'object'){ // Jeżeli główny obiekt nie jest obiektem
 			if(debug) console.log('Format ze starej wersji.');
