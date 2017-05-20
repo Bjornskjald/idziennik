@@ -65,18 +65,21 @@ module.exports = main
 function Client(name, jar, id){
 	/** 
 	 * Nazwa użytkownika zachowywana do wykonywania żądań do API 
+	 * @memberof Client
 	 * @type {string}
 	 */
 	this.name = name;
 
 	/** 
 	 * Obiekt z ciastkami potrzebnymi dla klienta HTTP
+	 * @memberof Client
 	 * @type {object}
 	 */
 	this.jar = jar;
 
 	/** 
 	 * Numer ID użytkownika zachowywany do wykonywania żądań do API
+	 * @memberof Client
 	 * @type {number}
 	 */
 	this.id = id;
@@ -84,6 +87,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca oceny, nie przyjmuje parametrów
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.oceny = () => {
@@ -104,6 +108,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca uwagi
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.uwagi = () => {
@@ -124,6 +129,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca plan
 	 * @function
+	 * @memberof Client
 	 * @params {Date} date Obiekt daty, na podstawie którego wyznaczane są zastępstwa na dany tydzień
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -145,6 +151,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca dostępnych odbiorców wiadomości
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.odbiorcy = () => {
@@ -165,6 +172,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca wiadomość
 	 * @function
+	 * @memberof Client
 	 * @params {string} id ID wiadomości
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -186,6 +194,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca pracowników zewnętrznej jednostki
 	 * @function
+	 * @memberof Client
 	 * @params {number} id ID jednostki
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -207,6 +216,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca listę odebranych wiadomości
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.odebrane = () => {
@@ -238,6 +248,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca listę wysłanych wiadomości
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.wyslane = () => {
@@ -269,6 +280,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja wysyłająca wiadomość
 	 * @function
+	 * @memberof Client
 	 * @params {string} odbiorca ID odbiorcy
 	 * @params {string} temat Temat wiadomości
 	 * @params {string} tresc Treść wiadomości
@@ -309,6 +321,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca obecności z danego miesiąca
 	 * @function
+	 * @memberof Client
 	 * @params {Date} date Data na podstawie której obliczany jest miesiąc obecności
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -330,6 +343,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca prace domowe z całego roku szkolnego
 	 * @function
+	 * @memberof Client
 	 * @params {Date} date Data na podstawie której wyznaczany jest rok szkolny
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -366,6 +380,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca treść pracy domowej
 	 * @function
+	 * @memberof Client
 	 * @params {number} id ID pracy domowej
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -387,6 +402,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca sprawdziany z danego miesiąca
 	 * @function
+	 * @memberof Client
 	 * @params {Date} date Data na podstawie której wyznaczany jest miesiąc
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
@@ -422,6 +438,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca brakujące oceny z całego roku szkolnego
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.brakujaceOceny = () => {
@@ -442,6 +459,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca wydarzenia z całego roku szkolnego
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.wydarzenia = () => {
@@ -474,6 +492,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca terminy wycieczek z całego roku szkolnego
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.wycieczki = () => {
@@ -506,6 +525,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca terminy egzaminów z całego roku szkolnego
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.egzaminy = () => {
@@ -526,6 +546,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja pobierająca listę podręczników na dany rok szkolny
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.podreczniki = () => {
@@ -558,6 +579,7 @@ function Client(name, jar, id){
 	/**
 	 * Funkcja zwracająca obiekt z danymi klienta
 	 * @function
+	 * @memberof Client
 	 * @returns {object} Obiekt z danymi klienta
 	 */
 	this.getAppState = () => {
@@ -568,6 +590,7 @@ function Client(name, jar, id){
 /**
  * Funkcja sprawdzająca poprawność podanych danych
  * @function
+ * @memberof Client
  * @params {string} name Nazwa użytkownika
  * @params {string} pass Hasło
  * @params {object} importedjar Załadowany obiekt z ciastkami (in-progress)
@@ -657,6 +680,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 /**
  * Funkcja pobierająca prace domowe z całego roku
  * @function
+ * @memberof Client
  * @params {string} name Nazwa użytkownika
  * @params {string} password Hasło
  * @params {string} hmac Wartość podana przez Portal Edukacyjny
