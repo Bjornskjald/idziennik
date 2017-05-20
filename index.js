@@ -1,10 +1,25 @@
+/**
+ * @fileOverview Główny plik modułu
+ * @author Bjornskjald
+ * @version 2.1.2
+ */
+
+/** Biblioteka crypto-js jest wymagana do "zaszyfrowania" hasła, czego wymaga Portal Edukacyjny przy logowaniu */
 const cryptojs = require('crypto-js');
 
+/** Moduł iDziennik używa request-promise-native jako klienta HTTP(S) */
 const rp = require('request-promise-native').defaults({followAllRedirects: true});
 
+/** Zmienna "debug" ustawiana jest globalnie, ponieważ logowanie następuje wcześniej niż utworzenie klienta */
 var debug
 
-module.exports = (object) => {
+/** Główna funkcja modułu.
+ * @function
+ * @param {object} object obiekt z danymi przekazywany do funkcji
+ * @returns {Client} Klient pobierający dane z API
+ * @throws Jeżeli parametr nie jest obiektem, to wyrzuca błąd
+ */
+function main(object) {
 	return new Promise((resolve, reject) => {
 		if(typeof object.debug === 'boolean'){
 			debug = object.debug
@@ -12,8 +27,9 @@ module.exports = (object) => {
 		} else {
 			debug = false
 		}
-		if(typeof object !== 'object'){ // Jeżeli główny obiekt nie jest obiektem
+		if(typeof object !== 'object'){
 			if(debug) console.log('Format ze starej wersji.');
+			/** @throws Dane powinny być podane w formie obiektu, a nie są. */
 			reject(new Error('Nieprawidłowy format danych.'))
 		}
 		if(typeof object.username !== 'string' || typeof object.password !== 'string') { // Jeżeli nazwa i hasło nie są stringami
@@ -37,6 +53,8 @@ module.exports = (object) => {
 	})
 }
 
+module.exports = main
+
 /**
  * Główny klient zwracany z funkcji logowania
  * @constructor
@@ -45,9 +63,29 @@ module.exports = (object) => {
  * @param {number} id - numer ID użytkownika
  */
 function Client(name, jar, id){
+	/** 
+	 * Nazwa użytkownika zachowywana do wykonywania żądań do API 
+	 * @type {string}
+	 */
 	this.name = name;
+
+	/** 
+	 * Obiekt z ciastkami potrzebnymi dla klienta HTTP
+	 * @type {object}
+	 */
 	this.jar = jar;
+
+	/** 
+	 * Numer ID użytkownika zachowywany do wykonywania żądań do API
+	 * @type {number}
+	 */
 	this.id = id;
+
+	/**
+	 * Funkcja pobierająca oceny, nie przyjmuje parametrów
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.oceny = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -62,6 +100,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca uwagi
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.uwagi = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -76,6 +120,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca plan
+	 * @function
+	 * @params {Date} date Obiekt daty, na podstawie którego wyznaczane są zastępstwa na dany tydzień
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.plan = (date) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -90,6 +141,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca dostępnych odbiorców wiadomości
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.odbiorcy = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -104,6 +161,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca wiadomość
+	 * @function
+	 * @params {string} id ID wiadomości
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.wiadomosc = (id) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -118,6 +182,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca pracowników zewnętrznej jednostki
+	 * @function
+	 * @params {number} id ID jednostki
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.pracownicyJednostki = (idjednostki) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -132,6 +203,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca listę odebranych wiadomości
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.odebrane = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -157,6 +234,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca listę wysłanych wiadomości
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.wyslane = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -182,6 +265,16 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja wysyłająca wiadomość
+	 * @function
+	 * @params {string} odbiorca ID odbiorcy
+	 * @params {string} temat Temat wiadomości
+	 * @params {string} tresc Treść wiadomości
+	 * @params {boolean} potwierdzenie Żądanie potwierdzenia przeczytania
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.wyslij = (odbiorca, temat, tresc, potwierdzenie) => {
 		function guid() {
 			function s4() {
@@ -212,6 +305,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca obecności z danego miesiąca
+	 * @function
+	 * @params {Date} date Data na podstawie której obliczany jest miesiąc obecności
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.obecnosci = (date) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -226,18 +326,15 @@ function Client(name, jar, id){
 			})
 		})
 	};
-	this.praceDomowe = () => {
-		function formatDate() {
-			var d = new Date(),
-				month = '' + (d.getMonth() + 1),
-				day = '' + d.getDate(),
-				year = d.getFullYear();
 
-			if (month.length < 2) month = '0' + month;
-			if (day.length < 2) day = '0' + day;
-
-			return [year, month, day].join('-');
-		}
+	/**
+	 * Funkcja pobierająca prace domowe z całego roku szkolnego
+	 * @function
+	 * @params {Date} date Data na podstawie której wyznaczany jest rok szkolny
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
+	this.praceDomowe = (date) => {
+		date.setHours(d.date.getHours() - d.date.getTimezoneOffset() / 60);
 		return new Promise((resolve, reject) => {
 			rp({
 				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzPraceDomowe',
@@ -253,7 +350,7 @@ function Client(name, jar, id){
 						parametryFiltrow: null
 					}, 
 					idP: this.id, 
-					data: formatDate(), 
+					data: date.toJSON().split('T')[0], 
 					wszystkie: true 
 				},
 				json: true, method: 'POST',
@@ -265,6 +362,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca treść pracy domowej
+	 * @function
+	 * @params {number} id ID pracy domowej
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.pracaDomowa = (id) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -279,6 +383,13 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca sprawdziany z danego miesiąca
+	 * @function
+	 * @params {Date} date Data na podstawie której wyznaczany jest miesiąc
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.sprawdziany = (date) => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -307,6 +418,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca brakujące oceny z całego roku szkolnego
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.brakujaceOceny = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -321,6 +438,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca wydarzenia z całego roku szkolnego
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.wydarzenia = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -347,6 +470,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca terminy wycieczek z całego roku szkolnego
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.wycieczki = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -373,6 +502,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca terminy egzaminów z całego roku szkolnego
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.egzaminy = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -387,6 +522,12 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja pobierająca listę podręczników na dany rok szkolny
+	 * @function
+	 * @returns {object} Obiekt z danymi pobranymi z API
+	 */
 	this.podreczniki = () => {
 		return new Promise((resolve, reject) => {
 			rp({
@@ -413,11 +554,27 @@ function Client(name, jar, id){
 			})
 		})
 	};
+
+	/**
+	 * Funkcja zwracająca obiekt z danymi klienta
+	 * @function
+	 * @returns {object} Obiekt z danymi klienta
+	 */
 	this.getAppState = () => {
 		return {id: this.id, jar: this.jar, name: this.name}
 	};
 }
 
+/**
+ * Funkcja sprawdzająca poprawność podanych danych
+ * @function
+ * @params {string} name Nazwa użytkownika
+ * @params {string} pass Hasło
+ * @params {object} importedjar Załadowany obiekt z ciastkami (in-progress)
+ * @params {number} importedid Załadowane ID użytkownika (in-progress)
+ * @returns {object} Obiekt z danymi do przekazania dla klienta
+ * @throws Jeżeli wystąpi błąd w trakcie logowania (np. nieprawidłowe hasło) to zwraca go w postaci klasy Error
+ */
 function checkLoggedIn(name, pass, importedjar, importedid) {
 	return new Promise((resolve, reject) => {
 		var jar = typeof importedjar === 'object' ? importedjar : rp.jar()
@@ -495,6 +652,16 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 	})
 }
 
+
+
+/**
+ * Funkcja pobierająca prace domowe z całego roku
+ * @function
+ * @params {string} name Nazwa użytkownika
+ * @params {string} password Hasło
+ * @params {string} hmac Wartość podana przez Portal Edukacyjny
+ * @returns {string} Ciąg znaków wymagany do logowania
+ */
 function crypto(name, password, hmac){
 	return cryptojs.HmacMD5(cryptojs.MD5(name.toLowerCase()+password).toString(cryptojs.enc.Hex), hmac).toString(cryptojs.enc.Hex);	
 }
