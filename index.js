@@ -130,7 +130,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca plan
 	 * @function
 	 * @memberof Client
-	 * @params {Date} date Obiekt daty, na podstawie którego wyznaczane są zastępstwa na dany tydzień
+	 * @param {Date} date Obiekt daty, na podstawie którego wyznaczane są zastępstwa na dany tydzień
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.plan = (date) => {
@@ -173,7 +173,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca wiadomość
 	 * @function
 	 * @memberof Client
-	 * @params {string} id ID wiadomości
+	 * @param {string} id ID wiadomości
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.wiadomosc = (id) => {
@@ -195,7 +195,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca pracowników zewnętrznej jednostki
 	 * @function
 	 * @memberof Client
-	 * @params {number} id ID jednostki
+	 * @param {number} id ID jednostki
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.pracownicyJednostki = (idjednostki) => {
@@ -281,10 +281,10 @@ function Client(name, jar, id){
 	 * Funkcja wysyłająca wiadomość
 	 * @function
 	 * @memberof Client
-	 * @params {string} odbiorca ID odbiorcy
-	 * @params {string} temat Temat wiadomości
-	 * @params {string} tresc Treść wiadomości
-	 * @params {boolean} potwierdzenie Żądanie potwierdzenia przeczytania
+	 * @param {string} odbiorca ID odbiorcy
+	 * @param {string} temat Temat wiadomości
+	 * @param {string} tresc Treść wiadomości
+	 * @param {boolean} potwierdzenie Żądanie potwierdzenia przeczytania
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.wyslij = (odbiorca, temat, tresc, potwierdzenie) => {
@@ -322,7 +322,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca obecności z danego miesiąca
 	 * @function
 	 * @memberof Client
-	 * @params {Date} date Data na podstawie której obliczany jest miesiąc obecności
+	 * @param {Date} date Data na podstawie której obliczany jest miesiąc obecności
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.obecnosci = (date) => {
@@ -344,7 +344,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca prace domowe z całego roku szkolnego
 	 * @function
 	 * @memberof Client
-	 * @params {Date} date Data na podstawie której wyznaczany jest rok szkolny
+	 * @param {Date} date Data na podstawie której wyznaczany jest rok szkolny
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.praceDomowe = (date) => {
@@ -381,7 +381,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca treść pracy domowej
 	 * @function
 	 * @memberof Client
-	 * @params {number} id ID pracy domowej
+	 * @param {number} id ID pracy domowej
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.pracaDomowa = (id) => {
@@ -403,7 +403,7 @@ function Client(name, jar, id){
 	 * Funkcja pobierająca sprawdziany z danego miesiąca
 	 * @function
 	 * @memberof Client
-	 * @params {Date} date Data na podstawie której wyznaczany jest miesiąc
+	 * @param {Date} date Data na podstawie której wyznaczany jest miesiąc
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.sprawdziany = (date) => {
@@ -591,10 +591,10 @@ function Client(name, jar, id){
  * Funkcja sprawdzająca poprawność podanych danych
  * @function
  * @memberof Client
- * @params {string} name Nazwa użytkownika
- * @params {string} pass Hasło
- * @params {object} importedjar Załadowany obiekt z ciastkami (in-progress)
- * @params {number} importedid Załadowane ID użytkownika (in-progress)
+ * @param {string} name Nazwa użytkownika
+ * @param {string} pass Hasło
+ * @param {object} importedjar Załadowany obiekt z ciastkami (in-progress)
+ * @param {number} importedid Załadowane ID użytkownika (in-progress)
  * @returns {object} Obiekt z danymi do przekazania dla klienta
  * @throws Jeżeli wystąpi błąd w trakcie logowania (np. nieprawidłowe hasło) to zwraca go w postaci klasy Error
  */
@@ -681,9 +681,9 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
  * Funkcja pobierająca prace domowe z całego roku
  * @function
  * @memberof Client
- * @params {string} name Nazwa użytkownika
- * @params {string} password Hasło
- * @params {string} hmac Wartość podana przez Portal Edukacyjny
+ * @param {string} name Nazwa użytkownika
+ * @param {string} password Hasło
+ * @param {string} hmac Wartość podana przez Portal Edukacyjny
  * @returns {string} Ciąg znaków wymagany do logowania
  */
 function crypto(name, password, hmac){
