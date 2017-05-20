@@ -276,15 +276,15 @@ function Client(name, jar, id){
 			rp({
 				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/sprawdziany/mod_sprawdzianyPanel.asmx/pobierzListe',
 				body: {
-					'param': {
-						"strona":1,
-						"iloscNaStrone":99,
-						"iloscRekordow":-1,
-						"kolumnaSort":"ss.Nazwa,sp.Data_sprawdzianu",
-						"kierunekSort":0,
-						"maxIloscZaznaczonych":0,
-						"panelFiltrow":0,
-						"parametryFiltrow":null
+					param: {
+						strona: 1,
+						iloscNaStrone: 99,
+						iloscRekordow: -1,
+						kolumnaSort: "ss.Nazwa,sp.Data_sprawdzianu",
+						kierunekSort: 0,
+						maxIloscZaznaczonych: 0,
+						panelFiltrow: 0,
+						parametryFiltrow: null
 					}, 
 					idP: this.id, 
 					miesiac: (date.getMonth()+1).toString(), 
@@ -449,8 +449,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 		}).then(body => {
 			if(typeof jar.token !== 'string'){
 				if(body.includes('504')){
-					reject()
-					throw new Error('Incorrect password.')
+					reject(new Error('Incorrect password.'))
 				}
 				jar.token = body.split('token" value')[1].split('\"')[1]
 				if(debug) console.log(jar.token);
@@ -479,7 +478,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 		}).then(response => {
 			if(debug) console.log(response.request.uri.pathname)
 			if(response.request.uri.pathname !== '/mod_panelRodzica/Oceny.aspx'){
-				reject('Failed on scraping main page.')
+				reject(new Error('Failed on scraping main page.'))
 				return
 			}
 			if(debug) console.log('Skończyłem pobierać ciastko')
