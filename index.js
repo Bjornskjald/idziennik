@@ -678,7 +678,7 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 
 
 /**
- * Funkcja pobierająca prace domowe z całego roku
+ * Funkcja zwracająca ciąg znaków do zalogowania się
  * @function
  * @memberof Client
  * @param {string} name Nazwa użytkownika
