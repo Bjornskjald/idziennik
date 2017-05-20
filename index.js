@@ -208,7 +208,7 @@ function Client(name, jar, id){
 		return new Promise((resolve, reject) => {
 			rp({
 				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/obecnosci/WS_obecnosciUcznia.asmx/pobierzObecnosciUcznia',
-				body: {idPozDziennika: this.id, mc: date.getMonth+1, rok: date.getFullYear(), dataTygodnia: null},
+				body: {idPozDziennika: this.id, mc: date.getMonth()+1, rok: date.getFullYear(), dataTygodnia: null},
 				json: true, method: 'POST',
 				jar: this.jar
 			}).then(response => {
