@@ -590,7 +590,6 @@ function Client(name, jar, id){
 /**
  * Funkcja sprawdzająca poprawność podanych danych
  * @function
- * @memberof Client
  * @param {string} name Nazwa użytkownika
  * @param {string} pass Hasło
  * @param {object} importedjar Załadowany obiekt z ciastkami (in-progress)
@@ -680,7 +679,6 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 /**
  * Funkcja zwracająca ciąg znaków do zalogowania się
  * @function
- * @memberof Client
  * @param {string} name Nazwa użytkownika
  * @param {string} password Hasło
  * @param {string} hmac Wartość podana przez Portal Edukacyjny
