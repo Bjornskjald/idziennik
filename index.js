@@ -36,6 +36,14 @@ module.exports = (object) => {
 		}
 	})
 }
+
+/**
+ * Główny klient zwracany z funkcji logowania
+ * @constructor
+ * @param {string} name - nazwa użytkownika
+ * @param {object} jar - obiekt zawierający ciastka potrzebne do korzystania z API
+ * @param {number} id - numer ID użytkownika
+ */
 function Client(name, jar, id){
 	this.name = name;
 	this.jar = jar;
