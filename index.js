@@ -619,15 +619,19 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				if(debug) console.log('Nie mam tokena, probuje pobrac')
 				try {
 					var formdata = {passworddata: crypto(name, pass, response.body.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
-				}
-				catch(err) {
+				} catch(err) {
 					reject(err)
 					return
 				}
 			} else {
 				if(debug) console.log('Mam token, ide dalej')
 				var formdata = {}
-				jar.token = response.body.split('token" value')[1].split('\"')[1]
+				try {
+					jar.token = response.body.split('token" value')[1].split('\"')[1]
+				} catch (err) {
+					reject(err)
+					return
+				}
 			}
 			return rp({
 				uri: 'https://pe.szczecin.pl/chapter_201208.asp',
@@ -638,7 +642,12 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				if(body.includes('504')){
 					reject(new Error('Incorrect password.'))
 				}
-				jar.token = body.split('token" value')[1].split('\"')[1]
+				try {
+					jar.token = body.split('token" value')[1].split('\"')[1]
+				} catch(err) {
+					reject(err)
+					return
+				}
 				if(debug) console.log(jar.token);
 			}
 			return rp({
@@ -656,7 +665,12 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
 				jar: jar
 			})
 		}).then(body => {
-			var wres = body.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
+			try {
+				var wres = body.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
+			} catch(err) {
+				reject(err)
+				return
+			}
 			return rp({
 				uri: 'https://iuczniowie.pe.szczecin.pl/Default.aspx',
 				form: {wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'},
