@@ -22,4 +22,4 @@ const idziennik = require('idziennik')
 ```
 
 ### Dokumentacja:
-Dokumentacja w postaci JSDoc jest dostępna w folderze docs/ oraz na (doclets.io)[https://doclets.io/Bjornskjald/idziennik/master].
+Dokumentacja w postaci JSDoc jest dostępna w folderze docs/ oraz na [doclets.io](https://doclets.io/Bjornskjald/idziennik/master)
