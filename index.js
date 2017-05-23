@@ -226,7 +226,7 @@ function Client(name, jar, id){
 				body: {
 					param: {
 						strona: 1,
-						iloscNaStrone: 30,
+						iloscNaStrone: 999,
 						iloscRekordow: -1,
 						kolumnaSort: "Data_nadania",
 						kierunekSort: 1,
@@ -258,7 +258,7 @@ function Client(name, jar, id){
 				body: {
 					param: {
 						strona: 1,
-						iloscNaStrone: 30,
+						iloscNaStrone: 999,
 						iloscRekordow: -1,
 						kolumnaSort: "Data_nadania",
 						kierunekSort: 1,
