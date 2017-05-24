@@ -1,17 +1,14 @@
 /**
  * @fileOverview Główny plik modułu
  * @author Bjornskjald
- * @version 2.1.2
+ * @version 4.0.0
  */
 
 /** Biblioteka crypto-js jest wymagana do "zaszyfrowania" hasła, czego wymaga Portal Edukacyjny przy logowaniu */
-const cryptojs = require('crypto-js');
+const cryptojs = require('crypto-js')
 
-/** Moduł iDziennik używa request-promise-native jako klienta HTTP(S) */
-const rp = require('request-promise-native').defaults({followAllRedirects: true});
-
-/** Zmienna "debug" ustawiana jest globalnie, ponieważ logowanie następuje wcześniej niż utworzenie klienta */
-var debug
+/** Moduł iDziennik używa superagent jako klienta HTTP(S) (zmiana z request-promise-native) */
+const request = require('superagent')
 
 /** Główna funkcja modułu.
  * @function
@@ -22,15 +19,16 @@ var debug
 function main(object) {
 	return new Promise((resolve, reject) => {
 		if(typeof object.debug === 'boolean'){
-			debug = object.debug
+			var debug = object.debug
 			console.log('Tryb debugowania włączony')
 		} else {
-			debug = false
+			var debug = false
 		}
 		if(typeof object !== 'object'){
-			if(debug) console.log('Format ze starej wersji.');
+			if(debug) console.log('Format ze starej wersji.')
 			/** @throws Dane powinny być podane w formie obiektu, a nie są. */
 			reject(new Error('Nieprawidłowy format danych.'))
+			return
 		}
 		if(typeof object.username !== 'string' || typeof object.password !== 'string') { // Jeżeli nazwa i hasło nie są stringami
 			/*if(typeof object.appstate === 'object'){ // Jeżeli jest podany appstate
@@ -44,8 +42,8 @@ function main(object) {
 			reject(new Error('Nieprawidłowy format danych.'))
 		} else {
 			if(debug) console.log('Loguję...')
-			checkLoggedIn(object.username, object.password).then(o => {
-				resolve(new Client(object.name, o.jar, o.id))
+			checkLoggedIn(object.username, object.password, undefined, undefined, debug).then(o => {
+				resolve(new Client(object.username, o.agent, o.id))
 			}).catch(e => {
 				reject(e)
 			})
@@ -59,51 +57,50 @@ module.exports = main
  * Główny klient zwracany z funkcji logowania
  * @constructor
  * @param {string} name - nazwa użytkownika
- * @param {object} jar - obiekt zawierający ciastka potrzebne do korzystania z API
+ * @param {object} agent - klient HTTPS przekazywany z funkcji logowania
  * @param {number} id - numer ID użytkownika
  */
-function Client(name, jar, id){
+function Client(name, agent, id){
 	/** 
 	 * Nazwa użytkownika zachowywana do wykonywania żądań do API 
 	 * @memberof Client
 	 * @type {string}
 	 */
-	this.name = name;
-
-	/** 
-	 * Obiekt z ciastkami potrzebnymi dla klienta HTTP
-	 * @memberof Client
-	 * @type {object}
-	 */
-	this.jar = jar;
+	this.name = name
 
 	/** 
 	 * Numer ID użytkownika zachowywany do wykonywania żądań do API
 	 * @memberof Client
 	 * @type {number}
 	 */
-	this.id = id;
+	this.id = id
+
+	/** 
+	 * Klient HTTPS przekazywany z funkcji logowania
+	 * @memberof Client
+	 * @type {object}
+	 */
+	this.agent = agent
 
 	/**
-	 * Funkcja pobierająca oceny, nie przyjmuje parametrów
+	 * Funkcja pobierająca oceny
 	 * @function
 	 * @memberof Client
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.oceny = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/oceny/WS_ocenyUcznia.asmx/pobierzOcenyUcznia',
-				body: {idPozDziennika: this.id}, 
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/oceny/WS_ocenyUcznia.asmx/pobierzOcenyUcznia')
+			.send({idPozDziennika: this.id})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca uwagi
@@ -113,18 +110,17 @@ function Client(name, jar, id){
 	 */
 	this.uwagi = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/uwagi/WS_uwagiUcznia.asmx/pobierzUwagiUcznia',
-				body: {idPozDziennika: this.id}, 
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/uwagi/WS_uwagiUcznia.asmx/pobierzUwagiUcznia')
+			.send({idPozDziennika: this.id})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca plan
@@ -135,18 +131,17 @@ function Client(name, jar, id){
 	 */
 	this.plan = (date) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/plan/WS_Plan.asmx/pobierzPlanZajec',
-				body: {idPozDziennika: this.id, data: date, pidRokSzkolny: 16}, 
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/plan/WS_Plan.asmx/pobierzPlanZajec')
+			.send({idPozDziennika: this.id, data: date, pidRokSzkolny: 16})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca dostępnych odbiorców wiadomości
@@ -156,18 +151,16 @@ function Client(name, jar, id){
 	 */
 	this.odbiorcy = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/pobierzListeOdbiorcow',
-				body: {},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/pobierzListeOdbiorcow')
+			.send({})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
 			}).catch(err => {
-				reject(err);
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca wiadomość
@@ -178,18 +171,17 @@ function Client(name, jar, id){
 	 */
 	this.wiadomosc = (id) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzWiadomosc',
-				body: {idWiadomosci: id, typWiadomosci: 0},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzWiadomosc')
+			.send({idWiadomosci: id, typWiadomosci: 0})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca pracowników zewnętrznej jednostki
@@ -200,18 +192,16 @@ function Client(name, jar, id){
 	 */
 	this.pracownicyJednostki = (idjednostki) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/pobierzPracownikowDlaWybranejJedn',
-				body: {idJednostkiNad: idjednostki}, 
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/pobierzPracownikowDlaWybranejJedn')
+			.send({idJednostkiNad: idjednostki})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
 			}).catch(err => {
-				reject(err);
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca listę odebranych wiadomości
@@ -221,29 +211,28 @@ function Client(name, jar, id){
 	 */
 	this.odebrane = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 999,
-						iloscRekordow: -1,
-						kolumnaSort: "Data_nadania",
-						kierunekSort: 1,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 1,
-						parametryFiltrow: [{idKolumny:"w.Typ_wiadomosci",paramWartosc:"0"}]
-					}
-				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 999,
+					iloscRekordow: -1,
+					kolumnaSort: "Data_nadania",
+					kierunekSort: 1,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 1,
+					parametryFiltrow: [{idKolumny:"w.Typ_wiadomosci",paramWartosc:"0"}]
+				}
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca listę wysłanych wiadomości
@@ -253,29 +242,28 @@ function Client(name, jar, id){
 	 */
 	this.wyslane = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 999,
-						iloscRekordow: -1,
-						kolumnaSort: "Data_nadania",
-						kierunekSort: 1,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 1,
-						parametryFiltrow: [{idKolumny:"w.Typ_wiadomosci",paramWartosc:"1"}]
-					}
-				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/PobierzListeWiadomosci')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 999,
+					iloscRekordow: -1,
+					kolumnaSort: "Data_nadania",
+					kierunekSort: 1,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 1,
+					parametryFiltrow: [{idKolumny:"w.Typ_wiadomosci",paramWartosc:"1"}]
+				}
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja wysyłająca wiadomość
@@ -292,31 +280,30 @@ function Client(name, jar, id){
 			function s4() {
 			return Math.floor((1 + Math.random()) * 0x10000)
 				.toString(16)
-				.substring(1);
+				.substring(1)
 			}
-			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4();
+			return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 		}
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/WyslijWiadomosc',
-				body: {
-					Wiadomosc: {
-						"Tytul": temat,
-						"Tresc": tresc,
-						"Confirmation": potwierdzenie,
-						"GuidMessage": guid(),
-						"Odbiorcy": typeof potwierdzenie === 'string' ? [potwierdzenie] : potwierdzenie
-					}
-				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_komunikator/WS_wiadomosci.asmx/WyslijWiadomosc')
+			.send({
+				Wiadomosc: {
+					"Tytul": temat,
+					"Tresc": tresc,
+					"Confirmation": potwierdzenie,
+					"GuidMessage": guid(),
+					"Odbiorcy": typeof odbiorca === 'string' ? [odbiorca] : odbiorca
+				}
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca obecności z danego miesiąca
@@ -327,18 +314,17 @@ function Client(name, jar, id){
 	 */
 	this.obecnosci = (date) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/obecnosci/WS_obecnosciUcznia.asmx/pobierzObecnosciUcznia',
-				body: {idPozDziennika: this.id, mc: date.getMonth()+1, rok: date.getFullYear(), dataTygodnia: null},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/obecnosci/WS_obecnosciUcznia.asmx/pobierzObecnosciUcznia')
+			.send({idPozDziennika: this.id, mc: date.getMonth()+1, rok: date.getFullYear(), dataTygodnia: null})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca prace domowe z całego roku szkolnego
@@ -348,34 +334,33 @@ function Client(name, jar, id){
 	 * @returns {object} Obiekt z danymi pobranymi z API
 	 */
 	this.praceDomowe = (date) => {
-		date.setHours(date.getHours() - date.getTimezoneOffset() / 60);
+		date.setHours(date.getHours() - date.getTimezoneOffset() / 60)
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzPraceDomowe',
-				body: {
-					param : {
-						strona: 1,
-						iloscNaStrone: 999,
-						iloscRekordow: -1,
-						kolumnaSort: "DataOddania",
-						kierunekSort: 0,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 0,
-						parametryFiltrow: null
-					}, 
-					idP: this.id, 
-					data: date.toJSON().split('T')[0], 
-					wszystkie: true 
-				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzPraceDomowe')
+			.send({
+				param : {
+					strona: 1,
+					iloscNaStrone: 999,
+					iloscRekordow: -1,
+					kolumnaSort: "DataOddania",
+					kierunekSort: 0,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 0,
+					parametryFiltrow: null
+				}, 
+				idP: this.id, 
+				data: date.toJSON().split('T')[0], 
+				wszystkie: true 
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca treść pracy domowej
@@ -386,18 +371,17 @@ function Client(name, jar, id){
 	 */
 	this.pracaDomowa = (id) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzJednaPraceDomowa',
-				body: {idP: this.id, idPD: id},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/pracaDomowa/WS_pracaDomowa.asmx/pobierzJednaPraceDomowa')
+			.send({idP: this.id, idPD: id})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca sprawdziany z danego miesiąca
@@ -408,32 +392,31 @@ function Client(name, jar, id){
 	 */
 	this.sprawdziany = (date) => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/sprawdziany/mod_sprawdzianyPanel.asmx/pobierzListe',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 99,
-						iloscRekordow: -1,
-						kolumnaSort: "ss.Nazwa,sp.Data_sprawdzianu",
-						kierunekSort: 0,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 0,
-						parametryFiltrow: null
-					}, 
-					idP: this.id, 
-					miesiac: (date.getMonth()+1).toString(), 
-					rok: date.getFullYear().toString()
-				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/sprawdziany/mod_sprawdzianyPanel.asmx/pobierzListe')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 99,
+					iloscRekordow: -1,
+					kolumnaSort: "ss.Nazwa,sp.Data_sprawdzianu",
+					kierunekSort: 0,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 0,
+					parametryFiltrow: null
+				}, 
+				idP: this.id, 
+				miesiac: (date.getMonth()+1).toString(), 
+				rok: date.getFullYear().toString()
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca brakujące oceny z całego roku szkolnego
@@ -443,18 +426,17 @@ function Client(name, jar, id){
 	 */
 	this.brakujaceOceny = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/brak_ocen/WS_BrakOcenUcznia.asmx/pobierzBrakujaceOcenyUcznia',
-				body: {idPozDziennika: this.id},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/brak_ocen/WS_BrakOcenUcznia.asmx/pobierzBrakujaceOcenyUcznia')
+			.send({idPozDziennika: this.id})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca wydarzenia z całego roku szkolnego
@@ -464,30 +446,29 @@ function Client(name, jar, id){
 	 */
 	this.wydarzenia = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWydarzeniaUcznia',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 999, 
-						iloscRekordow: -1,
-						kolumnaSort: "Data",
-						kierunekSort: 1,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 0,
-						parametryFiltrow: null
-					},
-					idP: this.id
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWydarzeniaUcznia')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 999, 
+					iloscRekordow: -1,
+					kolumnaSort: "Data",
+					kierunekSort: 1,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 0,
+					parametryFiltrow: null
 				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+				idP: this.id
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca terminy wycieczek z całego roku szkolnego
@@ -497,30 +478,29 @@ function Client(name, jar, id){
 	 */
 	this.wycieczki = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWycieczkiUcznia',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 999, 
-						iloscRekordow: -1,
-						kolumnaSort: "Data",
-						kierunekSort: 1,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 0,
-						parametryFiltrow: null
-					},
-					idP: this.id
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzWycieczkiUcznia')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 999, 
+					iloscRekordow: -1,
+					kolumnaSort: "Data",
+					kierunekSort: 1,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 0,
+					parametryFiltrow: null
 				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+				idP: this.id
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca terminy egzaminów z całego roku szkolnego
@@ -530,18 +510,17 @@ function Client(name, jar, id){
 	 */
 	this.egzaminy = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzOkeUcznia',
-				body: {idP: this.id},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/wwE/WS_wwE.asmx/pobierzOkeUcznia')
+			.send({idP: this.id})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja pobierająca listę podręczników na dany rok szkolny
@@ -551,30 +530,29 @@ function Client(name, jar, id){
 	 */
 	this.podreczniki = () => {
 		return new Promise((resolve, reject) => {
-			rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Podreczniki/WS_podreczniki.asmx/pobierzPodreczniki',
-				body: {
-					param: {
-						strona: 1,
-						iloscNaStrone: 999, 
-						iloscRekordow: -1,
-						kolumnaSort: "Nazwa",
-						kierunekSort: 0,
-						maxIloscZaznaczonych: 0,
-						panelFiltrow: 0,
-						parametryFiltrow: null
-					},
-					idP: this.id
+			this.agent
+			.post('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Podreczniki/WS_podreczniki.asmx/pobierzPodreczniki')
+			.send({
+				param: {
+					strona: 1,
+					iloscNaStrone: 999, 
+					iloscRekordow: -1,
+					kolumnaSort: "Nazwa",
+					kierunekSort: 0,
+					maxIloscZaznaczonych: 0,
+					panelFiltrow: 0,
+					parametryFiltrow: null
 				},
-				json: true, method: 'POST',
-				jar: this.jar
-			}).then(response => {
-				resolve(response.d);
-			}).catch(err => {
-				reject(err);
+				idP: this.id
+			})
+			.then(response => {
+				resolve(JSON.parse(response.text).d)
+			})
+			.catch(err => {
+				reject(err)
 			})
 		})
-	};
+	}
 
 	/**
 	 * Funkcja zwracająca obiekt z danymi klienta
@@ -584,7 +562,7 @@ function Client(name, jar, id){
 	 */
 	this.getAppState = () => {
 		return {id: this.id, jar: this.jar, name: this.name}
-	};
+	}
 }
 
 /**
@@ -592,98 +570,103 @@ function Client(name, jar, id){
  * @function
  * @param {string} name Nazwa użytkownika
  * @param {string} pass Hasło
- * @param {object} importedjar Załadowany obiekt z ciastkami (in-progress)
- * @param {number} importedid Załadowane ID użytkownika (in-progress)
+ * @param {object} agent Załadowany klient HTTP (in-progress)
+ * @param {number} id Załadowane ID użytkownika (in-progress)
  * @returns {object} Obiekt z danymi do przekazania dla klienta
  * @throws Jeżeli wystąpi błąd w trakcie logowania (np. nieprawidłowe hasło) to zwraca go w postaci klasy Error
  */
-function checkLoggedIn(name, pass, importedjar, importedid) {
+function checkLoggedIn(name, pass, agent, id, debug) {
 	return new Promise((resolve, reject) => {
-		var jar = typeof importedjar === 'object' ? importedjar : rp.jar()
-		var loggedInWithAppState = typeof importedjar === 'object'
-		rp({
-			uri: 'https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
-			jar: jar, resolveWithFullResponse: true
-		}).then(response => {
-			if(debug) console.log(response.request.href)
-			if(response.request.href === 'https://sisso.pe.szczecin.pl/Default.aspx' || response.body.includes('token" value="')){
-				if(debug) console.log('id jest & uzytkownik zalogowany');
-				resolve({jar: jar})
+		var loggedInWithAppState = typeof agent === 'object'
+
+		var agent = typeof agent === 'object' ? agent : request.agent()
+
+		var token
+
+		agent
+		.get('https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx')
+		.then(response => {
+			if(debug) console.log(response.request.url)
+			if(response.request.url === 'https://sisso.pe.szczecin.pl/Default.aspx' || response.text.includes('token" value="') || typeof id === 'number'){
+				if(debug) console.log('id jest & uzytkownik zalogowany')
+				resolve({agent: agent, id: id})
 				return
 			}
 			if(loggedInWithAppState){
-				reject(new Error('Cookie expired.'))
+				throw new Error('Cookie expired.')
 				return
 			}
-			if(!response.body.includes('" name="token" value="')){
+			if(!response.text.includes('" name="token" value="')){
 				if(debug) console.log('Nie mam tokena, probuje pobrac')
 				try {
-					var formdata = {passworddata: crypto(name, pass, response.body.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
+					var formdata = {passworddata: crypto(name, pass, response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
 				} catch(err) {
-					reject(err)
-					return
+					throw err
 				}
 			} else {
 				if(debug) console.log('Mam token, ide dalej')
 				var formdata = {}
 				try {
-					jar.token = response.body.split('token" value')[1].split('\"')[1]
+					token = response.text.split('token" value')[1].split('\"')[1]
 				} catch (err) {
-					reject(err)
-					return
+					throw err
 				}
 			}
-			return rp({
-				uri: 'https://pe.szczecin.pl/chapter_201208.asp',
-				method: 'POST', form: formdata, jar: jar
-			})
-		}).then(body => {
-			if(typeof jar.token !== 'string'){
-				if(body.includes('504')){
-					reject(new Error('Incorrect password.'))
+			return agent
+			.post('https://pe.szczecin.pl/chapter_201208.asp')
+			.type('form')
+			.send(formdata)
+		}).then(response => {
+			if(debug) console.log('Stage 2')
+			if(typeof token !== 'string'){
+				if(response.text.includes('504')){
+					throw new Error('Incorrect password.')
 				}
 				try {
-					jar.token = body.split('token" value')[1].split('\"')[1]
+					token = response.text.split('token" value')[1].split('\"')[1]
 				} catch(err) {
-					reject(err)
-					return
+					throw err
 				}
-				if(debug) console.log(jar.token);
 			}
-			return rp({
-				uri: 'https://sisso.pe.szczecin.pl:443/LoginPage.aspx',
-				method: 'POST', form: {token: jar.token}, jar: jar
-			})
-		}).then(body => {
-			delete jar.token
-			if(!body.includes(name.toUpperCase())){
-				reject()
-				throw new Error('Failed on logging in.')
-			}
-			return rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx',
-				jar: jar
-			})
-		}).then(body => {
-			try {
-				var wres = body.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
-			} catch(err) {
-				reject(err)
-				return
-			}
-			return rp({
-				uri: 'https://iuczniowie.pe.szczecin.pl/Default.aspx',
-				form: {wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'},
-				method: 'POST', jar: jar, resolveWithFullResponse: true
-			})
+			return agent
+			.post('https://sisso.pe.szczecin.pl:443/LoginPage.aspx')
+			.type('form')
+			.send({token: token})
 		}).then(response => {
-			if(debug) console.log(response.request.uri.pathname)
-			if(response.request.uri.pathname !== '/mod_panelRodzica/Oceny.aspx'){
-				reject(new Error('Failed on scraping main page.'))
-				return
+			if(debug) console.log('Stage 3')
+			token = ''
+			if(!response.text.includes(name.toUpperCase()) && !response.text.includes(name.toLowerCase())){
+				console.log(JSON.stringify(response))
+				throw new Error('Failed on logging in')
+			}
+			return agent
+			.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
+		}).then(response => {
+			if(debug) console.log('Stage 4')
+			try {
+				var wres = response.text.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
+			} catch(err) {
+				throw err
+			}
+			return agent
+			.post('https://iuczniowie.pe.szczecin.pl/Default.aspx')
+			.type('form')
+			.send({wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'})
+		}).then(response => {
+			if(debug) console.log('Stage 5')
+			if(debug) console.log(response.request.url)
+			if(response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
+				/* throw new Error('Failed on scraping main page.')
+				return */
+				return agent.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
 			}
 			if(debug) console.log('Skończyłem pobierać ciastko')
-			resolve({jar: jar, id: response.body.split('selected="selected" value="')[1].split('">')[0]})
+			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
+		}).then(response => {
+			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
+		}).catch(err => {
+			reject(err)
+			return
 		})
 	})
 }
@@ -699,5 +682,5 @@ function checkLoggedIn(name, pass, importedjar, importedid) {
  * @returns {string} Ciąg znaków wymagany do logowania
  */
 function crypto(name, password, hmac){
-	return cryptojs.HmacMD5(cryptojs.MD5(name.toLowerCase()+password).toString(cryptojs.enc.Hex), hmac).toString(cryptojs.enc.Hex);	
+	return cryptojs.HmacMD5(cryptojs.MD5(name.toLowerCase()+password).toString(cryptojs.enc.Hex), hmac).toString(cryptojs.enc.Hex)
 }
