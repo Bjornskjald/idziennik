@@ -577,6 +577,8 @@ function Client(name, agent, id){
  */
 function checkLoggedIn(name, pass, agent, id, debug) {
 	return new Promise((resolve, reject) => {
+		if(debug) console.log('Pobieram ciastko...')
+
 		var loggedInWithAppState = typeof agent === 'object'
 
 		var agent = typeof agent === 'object' ? agent : request.agent()
@@ -586,8 +588,8 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 		agent
 		.get('https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx')
 		.then(response => {
-			if(debug) console.log(response.req.url)
-			if(response.req.url === 'https://sisso.pe.szczecin.pl/Default.aspx' || (response.text.includes('token" value="') && typeof id === 'number')){
+			if(debug) console.log(response.request.url)
+			if(response.request.url === 'https://sisso.pe.szczecin.pl/Default.aspx' || (response.text.includes('token" value="') && typeof id === 'number')){
 				if(debug) console.log('id jest & uzytkownik zalogowany')
 				resolve({agent: agent, id: id})
 				return
@@ -643,7 +645,7 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 			.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
 		}).then(response => {
 			if(debug) console.log('Stage 4')
-			if(response.req.url === "https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx" && !response.text.includes('Working...')){
+			if(response.request.url === "https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx" && !response.text.includes('Working...')){
 				resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
 			}
 			try {
@@ -657,8 +659,8 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 			.send({wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'})
 		}).then(response => {
 			if(debug) console.log('Stage 5')
-			if(debug) console.log(response.req.url)
-			if(response.req.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
+			if(debug) console.log(response.request.url)
+			if(response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
 				/* throw new Error('Failed on scraping main page.')
 				return */
 				return agent.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
@@ -666,7 +668,8 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 			if(debug) console.log('Skończyłem pobierać ciastko')
 			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
 		}).then(response => {
-			if(response.req.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
+
+			if(response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
 				throw new Error('Failed on scraping main page.')
 				return
 			}
