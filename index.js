@@ -16,37 +16,32 @@ const request = require('superagent')
  * @returns {Client} Klient pobierający dane z API
  * @throws Jeżeli parametr nie jest obiektem, to wyrzuca błąd
  */
-function main(object) {
+function main(params) {
 	return new Promise((resolve, reject) => {
-		if(typeof object.debug === 'boolean'){
-			var debug = object.debug
+		if(typeof params.debug === 'boolean'){
+			var debug = params.debug
 			console.log('Tryb debugowania włączony')
 		} else {
 			var debug = false
 		}
-		if(typeof object !== 'object'){
+		if(typeof params !== 'object'){
 			if(debug) console.log('Format ze starej wersji.')
 			/** @throws Dane powinny być podane w formie obiektu, a nie są. */
 			reject(new Error('Nieprawidłowy format danych.'))
 			return
 		}
-		if(typeof object.username !== 'string' || typeof object.password !== 'string') { // Jeżeli nazwa i hasło nie są stringami
-			/*if(typeof object.appstate === 'object'){ // Jeżeli jest podany appstate
-				if(debug) console.log('Importuję dane...');
-				checkLoggedIn(object.appstate.username, '', object.appstate.jar, object.appstate.id).then(o => {
-					resolve(new Client(object.appstate.username, o.jar, object.appstate.id))
-				});
-			} else {
-				reject(new Error('Nieprawidłowy format danych.'))
-			}*/
-			reject(new Error('Nieprawidłowy format danych.'))
-		} else {
+		if(
+			(typeof params.username === 'string' && typeof params.password === 'string') || 
+			(typeof params.username === 'string' && typeof params.hash === 'string')
+		){
 			if(debug) console.log('Loguję...')
-			checkLoggedIn(object.username, object.password, undefined, undefined, debug).then(o => {
-				resolve(new Client(object.username, o.agent, o.id))
+			checkLoggedIn(params).then(o => {
+				resolve(new Client(params.username, o.agent, o.id))
 			}).catch(e => {
 				reject(e)
 			})
+		} else {
+			reject(new Error('Nieprawidłowy format danych.'))
 		}
 	})
 }
@@ -561,27 +556,26 @@ function Client(name, agent, id){
 	 * @returns {object} Obiekt z danymi klienta
 	 */
 	this.getAppState = () => {
-		return {id: this.id, jar: this.jar, name: this.name}
+		return {id: this.id, agent: this.agent, name: this.name}
 	}
 }
 
 /**
  * Funkcja sprawdzająca poprawność podanych danych
  * @function
- * @param {string} name Nazwa użytkownika
- * @param {string} pass Hasło
- * @param {object} agent Załadowany klient HTTP (in-progress)
- * @param {number} id Załadowane ID użytkownika (in-progress)
+ * @param {object} params Parametry logowania
  * @returns {object} Obiekt z danymi do przekazania dla klienta
  * @throws Jeżeli wystąpi błąd w trakcie logowania (np. nieprawidłowe hasło) to zwraca go w postaci klasy Error
  */
-function checkLoggedIn(name, pass, agent, id, debug) {
+function checkLoggedIn(params) {
+	// {name, pass, agent, id, hash, debug}
 	return new Promise((resolve, reject) => {
+		if(params.debug) var debug = true
+
 		if(debug) console.log('Pobieram ciastko...')
 
-		var loggedInWithAppState = typeof agent === 'object'
-
-		var agent = typeof agent === 'object' ? agent : request.agent()
+		var loggedInWithAppState = typeof params.agent === 'object'
+		var agent = typeof params.agent === 'object' ? params.agent : request.agent()
 
 		var token
 
@@ -589,9 +583,12 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 		.get('https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx')
 		.then(response => {
 			if(debug) console.log(response.request.url)
-			if(response.request.url === 'https://sisso.pe.szczecin.pl/Default.aspx' || (response.text.includes('token" value="') && typeof id === 'number')){
+			if(
+				response.request.url === 'https://sisso.pe.szczecin.pl/Default.aspx' || 
+				(response.text.includes('token" value="') && typeof params.id === 'number')
+			){
 				if(debug) console.log('id jest & uzytkownik zalogowany')
-				resolve({agent: agent, id: id})
+				resolve({agent: agent, id: params.id})
 				return
 			}
 			if(loggedInWithAppState){
@@ -601,7 +598,10 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 			if(!response.text.includes('" name="token" value="')){
 				if(debug) console.log('Nie mam tokena, probuje pobrac')
 				try {
-					var formdata = {passworddata: crypto(name, pass, response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: name}
+					if(params.hash === 'string'){
+						var formdata = {passworddata: crypto(params.hash, response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
+					}
+					var formdata = {passworddata: crypto(cryptojs.MD5(params.username.toLowerCase()+password).toString(cryptojs.enc.Hex), response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
 				} catch(err) {
 					throw err
 				}
@@ -637,7 +637,7 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 		}).then(response => {
 			if(debug) console.log('Stage 3')
 			token = ''
-			if(!response.text.includes(name.toUpperCase()) && !response.text.includes(name.toLowerCase())){
+			if(!response.text.includes(params.username.toUpperCase()) && !response.text.includes(params.username.toLowerCase())){
 				console.log(JSON.stringify(response))
 				throw new Error('Failed on logging in')
 			}
@@ -686,11 +686,10 @@ function checkLoggedIn(name, pass, agent, id, debug) {
 /**
  * Funkcja zwracająca ciąg znaków do zalogowania się
  * @function
- * @param {string} name Nazwa użytkownika
- * @param {string} password Hasło
+ * @param {string} md5 Hash MD5 wygenerowany z nazwy użytkownika i hasła
  * @param {string} hmac Wartość podana przez Portal Edukacyjny
  * @returns {string} Ciąg znaków wymagany do logowania
  */
-function crypto(name, password, hmac){
-	return cryptojs.HmacMD5(cryptojs.MD5(name.toLowerCase()+password).toString(cryptojs.enc.Hex), hmac).toString(cryptojs.enc.Hex)
+function crypto(md5, hmac){
+	return cryptojs.HmacMD5(md5, hmac).toString(cryptojs.enc.Hex)
 }
