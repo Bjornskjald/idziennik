@@ -1,7 +1,7 @@
 /**
  * @fileOverview Główny plik modułu
  * @author Bjornskjald
- * @version 4.0.0
+ * @version 4.2.1
  */
 
 /** Biblioteka crypto-js jest wymagana do "zaszyfrowania" hasła, czego wymaga Portal Edukacyjny przy logowaniu */
