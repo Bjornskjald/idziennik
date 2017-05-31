@@ -598,10 +598,13 @@ function checkLoggedIn(params) {
 			if(!response.text.includes('" name="token" value="')){
 				if(debug) console.log('Nie mam tokena, probuje pobrac')
 				try {
-					if(params.hash === 'string'){
+					if(typeof params.hash === 'string'){
+						if(debug) console.log('Loguje sie hashem')
 						var formdata = {passworddata: crypto(params.hash, response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
+					} else {
+						if(debug) console.log('Loguje sie haslem')
+						var formdata = {passworddata: crypto(cryptojs.MD5(params.username.toLowerCase()+password).toString(cryptojs.enc.Hex), response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
 					}
-					var formdata = {passworddata: crypto(cryptojs.MD5(params.username.toLowerCase()+password).toString(cryptojs.enc.Hex), response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
 				} catch(err) {
 					throw err
 				}
