@@ -211,8 +211,8 @@ function Client(name, agent, id){
 			.send({
 				param: {
 					strona: 1,
-					iloscNaStrone: 999,
-					iloscRekordow: -1,
+					iloscNaStrone: 65535,
+					iloscRekordow: 65535,
 					kolumnaSort: "Data_nadania",
 					kierunekSort: 1,
 					maxIloscZaznaczonych: 0,
@@ -242,8 +242,8 @@ function Client(name, agent, id){
 			.send({
 				param: {
 					strona: 1,
-					iloscNaStrone: 999,
-					iloscRekordow: -1,
+					iloscNaStrone: 65535,
+					iloscRekordow: 65535,
 					kolumnaSort: "Data_nadania",
 					kierunekSort: 1,
 					maxIloscZaznaczonych: 0,
