@@ -20,7 +20,10 @@ npm install Bjornskjald/idziennik
 Wypisanie obiektu z ocenami ucznia
 ```javascript
 const idziennik = require('idziennik')
-idziennik({username: 'nazwaUzytkownika', password: 'haslo'}).then(client => {
+idziennik({
+	username: 'nazwaUzytkownika',
+	password: 'haslo'
+}).then(client => {
 	client.oceny().then(console.log)
 })
 ```
@@ -34,7 +37,10 @@ Bezpieczniejsze jest zapisanie hashu hasła:
 const idziennik = require('idziennik')
 const fs = require('fs')
 
-idziennik({username: 'nazwaUzytkownika, password: 'haslo'}).then(client => {
+idziennik({
+	username: 'nazwaUzytkownika',
+	password: 'haslo'
+}).then(client => {
 	fs.writeFileSync('hash.json', client.getHash(), 'utf8')
 })
 ```
@@ -45,7 +51,10 @@ oraz wykorzystanie go ponownie w ten sposób:
 const idziennik = require('idziennik')
 const fs = require('fs')
 
-idziennik({username: 'nazwaUzytkownika', hash: fs.readFileSync('hash.json', 'utf8')}).then(client => {
+idziennik({
+	username: 'nazwaUzytkownika',
+	hash: fs.readFileSync('hash.json', 'utf8')
+}).then(client => {
 	// Dalsze czynności
 })
 ```
