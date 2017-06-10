@@ -36,7 +36,7 @@ function main(params) {
 		){
 			if(debug) console.log('Loguję...')
 			checkLoggedIn(params).then(o => {
-				resolve(new Client(params.username, o.agent, o.id))
+				resolve(new Client(params.username, o.agent, o.id, o.hash))
 			}).catch(e => {
 				reject(e)
 			})
@@ -54,8 +54,9 @@ module.exports = main
  * @param {string} name - nazwa użytkownika
  * @param {object} agent - klient HTTPS przekazywany z funkcji logowania
  * @param {number} id - numer ID użytkownika
+ * @param {string} hash - hash hasła użytkownika
  */
-function Client(name, agent, id){
+function Client(name, agent, id, hash){
 	/** 
 	 * Nazwa użytkownika zachowywana do wykonywania żądań do API 
 	 * @memberof Client
@@ -76,6 +77,13 @@ function Client(name, agent, id){
 	 * @type {object}
 	 */
 	this.agent = agent
+
+	/** 
+	 * Hash hasła użytkownika
+	 * @memberof Client
+	 * @type {string}
+	 */
+	this.hash = hash
 
 	/**
 	 * Funkcja pobierająca oceny
@@ -550,13 +558,13 @@ function Client(name, agent, id){
 	}
 
 	/**
-	 * Funkcja zwracająca obiekt z danymi klienta
+	 * Funkcja zwracająca hash hasła użytkownika
 	 * @function
 	 * @memberof Client
-	 * @returns {object} Obiekt z danymi klienta
+	 * @returns {string} Hash hasła użytkownika
 	 */
-	this.getAppState = () => {
-		return {id: this.id, agent: this.agent, name: this.name}
+	this.getHash = () => {
+		return this.hash
 	}
 }
 
@@ -649,7 +657,7 @@ function checkLoggedIn(params) {
 		}).then(response => {
 			if(debug) console.log('Stage 4')
 			if(response.request.url === "https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx" && !response.text.includes('Working...')){
-				resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
+				resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase()+params.password).toString(cryptojs.enc.Hex)})
 			}
 			try {
 				var wres = response.text.split('wresult\" value=\"')[1].split('\"')[0].replace(/&lt;/g, '<').replace(/&quot;/g, '"')
@@ -669,14 +677,14 @@ function checkLoggedIn(params) {
 				return agent.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
 			}
 			if(debug) console.log('Skończyłem pobierać ciastko')
-			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
+			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase()+params.password).toString(cryptojs.enc.Hex)})
 		}).then(response => {
 
 			if(response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx'){
 				throw new Error('Failed on scraping main page.')
 				return
 			}
-			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0]})
+			resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase()+params.password).toString(cryptojs.enc.Hex)})
 		}).catch(err => {
 			reject(err)
 			return
