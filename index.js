@@ -603,7 +603,7 @@ function checkLoggedIn(params) {
 						var formdata = {passworddata: crypto(params.hash, response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
 					} else {
 						if(debug) console.log('Loguje sie haslem')
-						var formdata = {passworddata: crypto(cryptojs.MD5(params.username.toLowerCase()+password).toString(cryptojs.enc.Hex), response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
+						var formdata = {passworddata: crypto(cryptojs.MD5(params.username.toLowerCase()+params.password).toString(cryptojs.enc.Hex), response.text.split('asecretpasswordhash')[2].split('\"')[1]), username: params.username}
 					}
 				} catch(err) {
 					throw err
