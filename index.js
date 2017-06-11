@@ -1,7 +1,7 @@
 /**
  * @fileOverview Główny plik modułu
  * @author Bjornskjald
- * @version 4.2.1
+ * @version 4.2.5
  */
 
 /** Biblioteka crypto-js jest wymagana do "zaszyfrowania" hasła, czego wymaga Portal Edukacyjny przy logowaniu */
@@ -577,31 +577,19 @@ function Client (name, agent, id, hash) {
  * @throws Jeżeli wystąpi błąd w trakcie logowania (np. nieprawidłowe hasło) to zwraca go w postaci klasy Error
  */
 function checkLoggedIn (params) {
-  // {name, pass, agent, id, hash, debug}
+  // {name, pass, hash, debug}
   return new Promise((resolve, reject) => {
     if (params.debug) var debug = true
 
     if (debug) console.log('Pobieram ciastko...')
 
-    var agent = typeof params.agent === 'object' ? params.agent : request.agent()
+    var agent = request.agent()
 
     var token
 
     agent
     .get('https://pe.szczecin.pl/chapter_201208.asp?wa=wsignin1.0&wtrealm=https://sisso.pe.szczecin.pl:443/LoginPage.aspx')
     .then(response => {
-      if (debug) console.log(response.request.url)
-      if (
-        response.request.url === 'https://sisso.pe.szczecin.pl/Default.aspx' ||
-        (response.text.includes('token" value="') && typeof params.id === 'number')
-      ) {
-        if (debug) console.log('id jest & uzytkownik zalogowany')
-        resolve({agent: agent, id: params.id})
-        return
-      }
-      if (typeof params.agent === 'object') {
-        throw new Error('Cookie expired.')
-      }
       var formdata
       if (!response.text.includes('" name="token" value="')) {
         if (debug) console.log('Nie mam tokena, probuje pobrac')
@@ -680,7 +668,7 @@ function checkLoggedIn (params) {
       resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase() + params.password).toString(cryptojs.enc.Hex)})
     }).then(response => {
       if (response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx') {
-        throw new Error('Failed on scraping main page.')
+        throw new Error('Failed on scraping main page. (' + response.request.url + ')')
       }
       resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase() + params.password).toString(cryptojs.enc.Hex)})
     }).catch(err => {
