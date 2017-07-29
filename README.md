@@ -1,4 +1,4 @@
-# idziennik [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/Fqhus) [![Docs](https://img.shields.io/badge/docs-on%20doclets-blue.svg)](https://doclets.io/Bjornskjald/idziennik/master)
+# idziennik [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/Fqhus) [![Docs](https://img.shields.io/badge/docs-on%20doclets-blue.svg)](https://doclets.io/Bjornskjald/idziennik/master) [![Build Status](https://travis-ci.org/Bjornskjald/idziennik.svg?branch=master)](https://travis-ci.org/Bjornskjald/idziennik)
 ## Moduł API iDziennika dla Node.js
 
 ### Uwaga! Moduł działa tylko z dziennikiem na Portalu Edukacyjnym (pe.szczecin.pl)!
@@ -31,7 +31,7 @@ idziennik({
 ### Uwaga!
 
 Zapisywanie hasła w postaci jawnej w kodzie jest niebezpieczne! (zwłaszcza, jeżeli ten kod umieszczasz na GitHubie)
-Bezpieczniejsze jest zapisanie hashu hasła:
+Bezpieczniejsze jest zapisanie hashu hasła w osobnym pliku:
 
 ```javascript
 const idziennik = require('idziennik')
@@ -45,7 +45,7 @@ idziennik({
 })
 ```
 
-oraz wykorzystanie go ponownie w ten sposób:
+dodanie go do .gitignore oraz wykorzystanie go ponownie w ten sposób:
 
 ```javascript
 const idziennik = require('idziennik')
