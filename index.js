@@ -636,7 +636,7 @@ function checkLoggedIn (params) {
     }).then(response => {
       if (debug) console.log('Stage 3')
       token = ''
-      if (!response.text.includes(params.username.toUpperCase()) && !response.text.includes(params.username.toLowerCase())) {
+      if (!response.text.includes(params.username.toUpperCase()) && !response.text.includes(params.username.toLowerCase()) && !response.text.includes('Token logowania')) {
         console.log(JSON.stringify(response))
         throw new Error('Failed on logging in')
       }
