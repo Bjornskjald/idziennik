@@ -133,7 +133,6 @@ module.exports = function Client (name, agent, id, hash) {
    */
   this.pracaDomowa = require('./client/pracaDomowa')
 
-
   /**
    * Funkcja pobierająca sprawdziany z danego miesiąca
    * @function
