@@ -1,0 +1,37 @@
+{
+  "__type":"mds.Web.plan.WS_Plan+sPlanZajec",
+  "OdDnia":"/Date(-62135596800000)/",
+  "DoDnia":"/Date(-62135596800000)/",
+  "DniTygodnia":[
+    {
+      "Nazwa":"Poniedziałek",
+      "CzyPokazac":true
+    }
+  ],
+  "GodzinyLekcyjne":[
+    {
+      "LiczbaP":1,
+      "Poczatek":"08:00",
+      "Koniec":"08:45"
+    }
+  ],
+  "Przedmioty":[
+    {
+      "Nazwa":"Nazwa przedmiotu",
+      "Skrot":"Przedm.",
+      "Id":1000,
+      "Nauczyciel":"Imię Nazwisko",
+      "NauczycielSkrot":"I. Nazwisko",
+      "DzienTygodnia":1,
+      "Godzina":1,
+      "Tydzien":0,
+      "Kolor":"#c35b00",
+      "ZajeciaOdwolane":0,
+      "TypZastepstwa":-1,
+      "NauZastepujacy":"",
+      "OpisPrzyczyna":"Zajęcia odbywają się zgodnie z planem",
+      "PrzedmiotZastepujacy":"",
+      "NazwaSali":""
+    }
+  ]
+}

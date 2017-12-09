@@ -1,0 +1,78 @@
+{
+  "__type":"mds.Web.uwagi.WS_uwagiUcznia+sDaneUwagi",
+  "SUwaga":[
+    {
+      "Tresc":"Treść uwagi ogólnej",
+      "Data":"2017-09-01",
+      "Nauczyciel":"Imię Nazwisko",
+      "Typ":"o",
+      "Punkty":"0",
+      "id":"RandomString",
+      "Potwierd":false,
+      "Semestr":1
+    },
+    {
+      "Tresc":"Treść uwagi pozytywnej",
+      "Data":"2017-09-01",
+      "Nauczyciel":"Imię Nazwisko",
+      "Typ":"p",
+      "Punkty":"20",
+      "id":"RandomString",
+      "Potwierd":false,
+      "Semestr":1
+    },
+    {
+      "Tresc":"Treść uwagi negatywnej",
+      "Data":"2017-09-01",
+      "Nauczyciel":"Imię Nazwisko",
+      "Typ":"n",
+      "Punkty":"-20",
+      "id":"RandomString",
+      "Potwierd":false,
+      "Semestr":1
+    },
+  ],
+  "Bledy":{
+    "__type":"mds.Module.Globalne+sBledy",
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Poczatkowa":340,
+  "ProponowaneOceny":[
+    {
+      "skala_od":-9999,
+      "skala_do":-0.01,
+      "ocena_text":"naganne"
+    },
+    {
+      "skala_od":0,
+      "skala_do":200,
+      "ocena_text":"nieodpowiednie"
+    },
+    {
+      "skala_od":200.01,
+      "skala_do":300,
+      "ocena_text":"poprawne"
+    },
+    {
+      "skala_od":300.01,
+      "skala_do":400,
+      "ocena_text":"dobre"
+    },
+    {
+      "skala_od":400.01,
+      "skala_do":500,
+      "ocena_text":"bardzo dobre"
+    },
+    {
+      "skala_od":500.01,
+      "skala_do":10000,
+      "ocena_text":"wzorowe"
+    }
+  ]
+}

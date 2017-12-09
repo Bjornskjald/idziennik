@@ -1,0 +1,37 @@
+{
+  "__type":"mds.Web.sprawdziany.WS_mod_sprawdzianyPanel+sDaneList",
+  "ListK":[
+    {
+      "data":"2017-12-24",
+      "dzienTyg":"Niedziela",
+      "przedmiot":"Nazwa przedmiotu",
+      "rodzaj":"Kartkówka",
+      "wpisal":"Imię Nazwisko",
+      "zakres":"Zakres sprawdzianu",
+      "_recordId":123456
+    }
+  ],
+  "Bledy":{
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":null,
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":99,
+    "iloscRekordow":3,
+    "kolumnaSort":"ss.Nazwa,sp.Data_sprawdzianu",
+    "kierunekSort":0,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":0
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "__type":"mds.Web.mod_komunikator.WS_mod_wiadomosci+sUserList",
+  "ListK_Pracownicy":[
+    {
+      "Id":"23efb98b-42a8-4c3d-a8fc-09275840be57",
+      "ImieNazwisko":"Imię Nazwisko",
+      "ListaTypow":[
+        "administrator klienta",
+        "administrator zespołu"
+      ],
+      "CzyJestNauczycielem":true,
+      "CzyJestWychowawca":true
+    }
+  ],
+  "ListK_Opiekunowie":[
+    {
+      "Id":"7422149c-4186-415f-98a2-0022f4223356",
+      "ImieNazwisko":"Imię Nazwisko",
+      "Plec":1,
+      "IdKlasa":1000
+    }
+  ],
+  "ListK_Uczniow":[
+    {
+      "Id":"2f6ed941-9c2b-470e-bc3a-c305caab50ec",
+      "ImieNazwisko":"Imię Nazwisko",
+      "IdKlasa":1000,
+      "Skreslony":false,
+      "Ojciec":"72142c5a-4b99-475b-8682-333ec33e14e11",
+      "Matka":"41524350-fa59-4433-8f41-8a0deac832681",
+      "BShow":true
+    }
+  ],
+  "CzyKontaktPozaJedn":"1",
+  "ListK_Jednostek":[
+    {
+      "Id":1,
+      "Nazwa":"Przykładowa szkoła"
+    }
+  ],
+  "ListK_Klasy":[
+    {
+      "IdKlasa":1000,
+      "Klasa":"1a",
+      "Jedn":"gim1"
+    }
+  ],
+  "Bledy":{
+    "__type":"mds.Module.Globalne+sBledy",
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":null,
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":30,
+    "iloscRekordow":-1,
+    "kolumnaSort":{
+
+    },
+    "kierunekSort":0,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":0
+  }
+}

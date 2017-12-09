@@ -1,0 +1,34 @@
+{
+  "__type":"mds.Web.wwE.WS_wwE+sDaneWKList",
+  "ListK":[
+    {
+      "_recordId":123456,
+      "Data":"2017-09-04",
+      "Info":"Rozpoczęcie roku szkolnego 2017/2018",
+      "Klasa":null
+    }
+  ],
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":null,
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":999,
+    "iloscRekordow":16,
+    "kolumnaSort":"Data",
+    "kierunekSort":1,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":0
+  },
+  "Bledy":{
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  }
+}

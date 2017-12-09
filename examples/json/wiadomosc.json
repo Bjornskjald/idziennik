@@ -1,0 +1,31 @@
+{
+  "__type":"mds.Web.mod_komunikator.WS_mod_wiadomosci+detailWiadomosci",
+  "Wiadomosc":{
+    "_recordId":12345678,
+    "DataNadania":"2017-09-01 00:00:00",
+    "DataOdczytania":"2017-09-01 00:00:00",
+    "Nadawca":"Imię Nazwisko",
+    "ListaOdbiorcow":[
+      {
+        "NazwaOdbiorcy":"Imię Nazwisko",
+        "Status":"1"
+      }
+    ],
+    "Tytul":"Tytuł wiadomości",
+    "Text":"Treść wiadomości",
+    "ListaZal":[
+
+    ]
+  },
+  "Bledy":{
+    "__type":"mds.Module.Globalne+sBledy",
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "czyJestWiecej":false
+}
