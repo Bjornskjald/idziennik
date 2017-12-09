@@ -189,7 +189,7 @@ module.exports = function Client (name, agent, id, hash) {
    * @returns {object} Obiekt z danymi pobranymi z API
    */
   this.skasujWiadomosc = require('./client/skasujWiadomosc')
-  
+
   /**
    * Funkcja zwracająca hash hasła użytkownika
    * @function
