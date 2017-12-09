@@ -68,7 +68,7 @@ function main (params) {
       )
     ) {
       if (debug) console.log('Loguję...')
-      checkLoggedIn(params).then(o => {
+      login(params).then(o => {
         resolve(new Client(params.username, o.agent, o.id, o.hash))
       }).catch(e => {
         reject(e)
