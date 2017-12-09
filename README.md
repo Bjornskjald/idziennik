@@ -63,4 +63,5 @@ Zapobiegnie to łatwemu wyciekowi hasła z kodu.
 
 ### Dokumentacja:
 Dokumentacja w postaci JSDoc jest dostępna na [doclets.io](https://doclets.io/Bjornskjald/idziennik/master)
+
 Przykładowe odpowiedzi dla każdej funkcji są dostępne [tutaj](client.md)
