@@ -8,7 +8,7 @@ const cryptojs = require('crypto-js')
  * @param {string} hmac Wartość podana przez Portal Edukacyjny
  * @returns {string} Ciąg znaków wymagany do logowania
  */
-const crypto = require('./utils/crypto')
+const crypto = require('../utils/crypto')
 
 /** Moduł iDziennik używa superagent jako klienta HTTP(S) (zmiana z request-promise-native) */
 const request = require('superagent')
