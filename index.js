@@ -40,7 +40,7 @@ function main (params) {
       return
     }
     if (
-      (typeof params.username === 'string' && 
+      (typeof params.username === 'string' &&
         (params.username !== '' && params.username !== ' ')
       ) &&
       (

@@ -16,7 +16,7 @@ const request = require('superagent')
 module.exports = params => {
   // {name, pass, hash, debug}
   return new Promise((resolve, reject) => {
-    var debug = msg => { if(params.debug) console.log(msg) }
+    var debug = msg => { if (params.debug) console.log(msg) }
 
     debug('Pobieram ciastko...')
 
