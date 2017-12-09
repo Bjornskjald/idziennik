@@ -1,3 +1,18 @@
+/** Biblioteka crypto-js jest wymagana do "zaszyfrowania" hasła, czego wymaga Portal Edukacyjny przy logowaniu */
+const cryptojs = require('crypto-js')
+
+/**
+ * Funkcja zwracająca ciąg znaków do zalogowania się
+ * @function
+ * @param {string} md5 Hash MD5 wygenerowany z nazwy użytkownika i hasła
+ * @param {string} hmac Wartość podana przez Portal Edukacyjny
+ * @returns {string} Ciąg znaków wymagany do logowania
+ */
+const crypto = require('./utils/crypto')
+
+/** Moduł iDziennik używa superagent jako klienta HTTP(S) (zmiana z request-promise-native) */
+const request = require('superagent')
+
 module.exports = params => {
   // {name, pass, hash, debug}
   return new Promise((resolve, reject) => {
