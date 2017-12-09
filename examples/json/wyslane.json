@@ -1,0 +1,43 @@
+{
+  "__type":"mds.Web.mod_komunikator.WS_mod_wiadomosci+sWiadomosciList",
+  "ListK":[
+    {
+      "_recordId":"ro8bv04XDDDvwd4",
+      "Nadawca":"ImieNazwisko",
+      "Tytul":"Tytuł wiadomości",
+      "DataNadania":"2017-09-01 00:00, Wt",
+      "_idNadawcy":"e47e4cdf-87df-abcd-8240-be7e8b52136d",
+      "_idNadawcyJedn":"-1",
+      "_customStyle":""
+    }
+  ],
+  "Bledy":{
+    "__type":"mds.Module.Globalne+sBledy",
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":[
+      {
+        "idKolumny":"w.Typ_wiadomosci",
+        "paramWartosc":"1"
+      }
+    ],
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":65535,
+    "iloscRekordow":276,
+    "kolumnaSort":"Data_nadania",
+    "kierunekSort":1,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":1
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "__type":"mds.Web.pracaDomowa.WS_pracaDomowa+sDanePDList",
+  "ListK":[
+    {
+      "_recordId":12345,
+      "dataZ":"2017-09-01",
+      "tytul":"Tytuł zadania",
+      "dataO":"2017-06-24",
+      "przed":"Nazwa przedmiotu",
+      "usr":"Imię Nazwisko"
+    }
+  ],
+  "Bledy":{
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":null,
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":999,
+    "iloscRekordow":23,
+    "kolumnaSort":"DataOddania",
+    "kierunekSort":0,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":0
+  }
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <pobierzObecnosciUczniaResponse xmlns="http://tempuri.org/">
+      <pobierzObecnosciUczniaResult>
+        <Miesiac>int</Miesiac>
+        <Rok>int</Rok>
+        <jestPlan>boolean</jestPlan>
+        <EdycjaObecnosci>int</EdycjaObecnosci>
+        <Obecnosci>
+          <sObecnosc>
+            <Data>string</Data>
+            <Dzien>int</Dzien>
+            <DzienTygodnia>int</DzienTygodnia>
+            <Przedmiot>string</Przedmiot>
+            <IdPrzedmiot>int</IdPrzedmiot>
+            <Godzina>int</Godzina>
+            <OdDoGodziny>string</OdDoGodziny>
+            <TypObecnosci>Obecny or Usprawiedliwiony or Spozniony or Nieobecny or Zwolniony or BrakZajec or Ferie or Wycieczka or ZwolnionyObecny</TypObecnosci>
+            <IdObecnosci>string</IdObecnosci>
+            <PrzedmiotTemat>string</PrzedmiotTemat>
+            <PrzedmiotNauczyciel>string</PrzedmiotNauczyciel>
+            <IdNauczyciel>int</IdNauczyciel>
+            <N>string</N>
+            <Historia>boolean</Historia>
+            <MozliwaEdycja>boolean</MozliwaEdycja>
+            <IdLesson>string</IdLesson>
+            <IdRegisterPosition>int</IdRegisterPosition>
+          </sObecnosc>
+          <sObecnosc>
+            <Data>string</Data>
+            <Dzien>int</Dzien>
+            <DzienTygodnia>int</DzienTygodnia>
+            <Przedmiot>string</Przedmiot>
+            <IdPrzedmiot>int</IdPrzedmiot>
+            <Godzina>int</Godzina>
+            <OdDoGodziny>string</OdDoGodziny>
+            <TypObecnosci>Obecny or Usprawiedliwiony or Spozniony or Nieobecny or Zwolniony or BrakZajec or Ferie or Wycieczka or ZwolnionyObecny</TypObecnosci>
+            <IdObecnosci>string</IdObecnosci>
+            <PrzedmiotTemat>string</PrzedmiotTemat>
+            <PrzedmiotNauczyciel>string</PrzedmiotNauczyciel>
+            <IdNauczyciel>int</IdNauczyciel>
+            <N>string</N>
+            <Historia>boolean</Historia>
+            <MozliwaEdycja>boolean</MozliwaEdycja>
+            <IdLesson>string</IdLesson>
+            <IdRegisterPosition>int</IdRegisterPosition>
+          </sObecnosc>
+        </Obecnosci>
+        <DniTygodnia>
+          <TimetableActiveDaysDto>
+            <NameOfTheDay>string</NameOfTheDay>
+            <IsActive>boolean</IsActive>
+          </TimetableActiveDaysDto>
+          <TimetableActiveDaysDto>
+            <NameOfTheDay>string</NameOfTheDay>
+            <IsActive>boolean</IsActive>
+          </TimetableActiveDaysDto>
+        </DniTygodnia>
+        <Statystyki>
+          <ileBrakZajec>int</ileBrakZajec>
+          <ileNieobecnosci>int</ileNieobecnosci>
+          <ileSpoznien>int</ileSpoznien>
+          <ileObecnosci>int</ileObecnosci>
+          <ileUsprawiedliwien>int</ileUsprawiedliwien>
+          <ileZwolnien>int</ileZwolnien>
+          <ileFerii>int</ileFerii>
+          <ileWycieczek>int</ileWycieczek>
+          <ileZwolnionyObecny>int</ileZwolnionyObecny>
+        </Statystyki>
+      </pobierzObecnosciUczniaResult>
+    </pobierzObecnosciUczniaResponse>
+  </soap12:Body>
+</soap12:Envelope>

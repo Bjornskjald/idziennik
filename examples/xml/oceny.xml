@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <pobierzOcenyUczniaResponse xmlns="http://tempuri.org/">
+      <pobierzOcenyUczniaResult>
+        <PokazSrednia>boolean</PokazSrednia>
+        <PokazSredniaSem0>boolean</PokazSredniaSem0>
+        <WarSredniaOcen>boolean</WarSredniaOcen>
+        <TypOceniania>int</TypOceniania>
+        <JakaSrednia>string</JakaSrednia>
+        <IloscSemestrow>int</IloscSemestrow>
+        <WybranySemestr>int</WybranySemestr>
+        <Przedmioty>
+          <Przedmioty>
+            <Przedmiot>string</Przedmiot>
+            <opisowy>boolean</opisowy>
+            <Oceny xsi:nil="true" />
+            <SrednieWSemestrach xsi:nil="true" />
+            <SrednieCaloroczne>string</SrednieCaloroczne>
+            <PunktyWSemestrach xsi:nil="true" />
+            <WymuszonyTypOceniania>int</WymuszonyTypOceniania>
+            <IdPrzedmiotu>int</IdPrzedmiotu>
+          </Przedmioty>
+          <Przedmioty>
+            <Przedmiot>string</Przedmiot>
+            <opisowy>boolean</opisowy>
+            <Oceny xsi:nil="true" />
+            <SrednieWSemestrach xsi:nil="true" />
+            <SrednieCaloroczne>string</SrednieCaloroczne>
+            <PunktyWSemestrach xsi:nil="true" />
+            <WymuszonyTypOceniania>int</WymuszonyTypOceniania>
+            <IdPrzedmiotu>int</IdPrzedmiotu>
+          </Przedmioty>
+        </Przedmioty>
+      </pobierzOcenyUczniaResult>
+    </pobierzOcenyUczniaResponse>
+  </soap12:Body>
+</soap12:Envelope>

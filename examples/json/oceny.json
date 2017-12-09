@@ -1,0 +1,69 @@
+{
+  "__type":"mds.Web.oceny.WS_ocenyUcznia+OcenyUcznia",
+  "PokazSrednia":true,
+  "PokazSredniaSem0":false,
+  "WarSredniaOcen":true,
+  "TypOceniania":3,
+  "JakaSrednia":"2",
+  "IloscSemestrow":2,
+  "WybranySemestr":1,
+  "Przedmioty":[
+    {
+      "Przedmiot":"Nazwa przedmiotu",
+      "opisowy":false,
+      "Oceny":[
+        {
+          "Semestr":1,
+          "Ocena":"6",
+          "WartoscDoSred":6,
+          "Kategoria":"Kategoria oceny",
+          "idK":1234567,
+          "Waga":3,
+          "Wystawil":"Imię Nazwisko",
+          "Data_wystaw":"2017-02-31",
+          "DoSredniej":true,
+          "Kolor":"000000",
+          "Slownie":null,
+          "typOczekiwan":0,
+          "punkty":0,
+          "Typ":0,
+          "Uzasadnienie":"",
+          "Historia":[
+            {
+              "Semestr":1,
+              "Ocena":"0",
+              "WartoscDoSred":0,
+              "Kategoria":"Kategoria oceny",
+              "idK":0,
+              "Waga":3,
+              "Wystawil":"Brak danych",
+              "Data_wystaw":"2017-02-30",
+              "DoSredniej":false,
+              "Kolor":"fe0000",
+              "Slownie":null,
+              "typOczekiwan":0,
+              "punkty":0,
+              "Typ":0,
+              "Uzasadnienie":"ocena poprawiona przez ucznia",
+              "Historia":null,
+              "MaxIloscPunktow":0,
+              "MinIloscPunktow":0,
+              "UzasadnienieOceny":null
+            }
+          ],
+          "MaxIloscPunktow":0,
+          "MinIloscPunktow":0,
+          "UzasadnienieOceny":""
+        }
+      ],
+      "SrednieWSemestrach":[
+        "6",
+        ""
+      ],
+      "SrednieCaloroczne":"6",
+      "PunktyWSemestrach":null,
+      "WymuszonyTypOceniania":null,
+      "IdPrzedmiotu":1000
+    }
+  ]
+}

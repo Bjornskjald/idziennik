@@ -1,0 +1,32 @@
+{
+  "__type":"mds.Web.brak_ocen.WS_BrakOcenUcznia+sOcenyUcznia",
+  "Przedmioty":[
+    {
+      "Przedmiot":"Nazwa przedmiotu",
+      "KategorieBrakujaceSem1":[
+        {
+          "Nazwa":"Kategoria oceny",
+          "Max":0,
+          "Waga":1,
+          "Kolor":"000000",
+          "DoSredniej":true
+        }
+      ],
+      "KategorieBrakujaceSem2":[
+
+      ],
+      "KategorieBrakujaceSem3":[
+
+      ],
+      "KategorieBrakujaceSem4":[
+
+      ],
+      "OcenaSem1":"",
+      "OcenaSem2":"",
+      "OcenaSem3":null,
+      "OcenaSem4":null
+    }
+  ],
+  "TypOceniania":3,
+  "IloscSemestrow":2
+}

@@ -1,0 +1,36 @@
+{
+  "__type":"mds.Web.Podreczniki.WS_wwE+sDanePList",
+  "ListK":[
+    {
+      "_recordId":12345,
+      "Przedmiot":"Przedmiot",
+      "Prowadzacy":"Imię Nazwisko",
+      "Tytul":"Tytuł podręcznika",
+      "Autor":"Autor/autorzy podręcznika",
+      "Wydawnictwo":"Wydawnictwo"
+    }
+  ],
+  "Bledy":{
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  },
+  "Parametry":{
+    "__type":"mds.Module.Globalne+sParametry",
+    "parametryFiltrow":null,
+    "wierszeLegendy":[
+
+    ],
+    "strona":1,
+    "iloscNaStrone":999,
+    "iloscRekordow":2,
+    "kolumnaSort":"Nazwa",
+    "kierunekSort":0,
+    "maxIloscZaznaczonych":0,
+    "panelFiltrow":0
+  }
+}

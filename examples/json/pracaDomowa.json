@@ -1,0 +1,22 @@
+{
+  "__type":"mds.Web.pracaDomowa.WS_pracaDomowa+PracaDOne",
+  "praca":{
+    "_recordId":12345,
+    "tytul":"Tytuł zadania",
+    "dataZ":"2017-09-01",
+    "dataO":"2017-06-24",
+    "tresc":"Treść zadania",
+    "zalacznik":false,
+    "przedNazwa":"Nazwa przedmiotu",
+    "usrName":"Imię Nazwisko"
+  },
+  "Bledy":{
+    "CzyJestBlad":false,
+    "ListaBledow":[
+
+    ],
+    "ListaKodowBledow":[
+
+    ]
+  }
+}

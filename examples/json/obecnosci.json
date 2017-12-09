@@ -1,0 +1,70 @@
+{
+  "__type":"mds.Web.obecnosci.WS_obecnosciUcznia+sObecnosci",
+  "Miesiac":12,
+  "Rok":2017,
+  "jestPlan":true,
+  "EdycjaObecnosci":0,
+  "Obecnosci":[
+    {
+      "__type":"mds.Web.obecnosci.WS_obecnosciUcznia+sObecnosc",
+      "Data":"2017-12-01 00:00:00",
+      "Dzien":1,
+      "DzienTygodnia":1,
+      "Przedmiot":"Nazwa przedmiotu",
+      "IdPrzedmiot":1000,
+      "Godzina":1,
+      "OdDoGodziny":"08:00 - 08:45",
+      "TypObecnosci":2,
+      "IdObecnosci":"12345678",
+      "PrzedmiotTemat":"",
+      "PrzedmiotNauczyciel":"Imię Nazwisko",
+      "IdNauczyciel":0,
+      "N":"",
+      "Historia":true,
+      "MozliwaEdycja":false,
+      "IdLesson":"RandomString",
+      "IdRegisterPosition":0
+    }
+  ],
+  "DniTygodnia":[
+    {
+      "NameOfTheDay":"Poniedziałek",
+      "IsActive":true
+    },
+    {
+      "NameOfTheDay":"Wtorek",
+      "IsActive":true
+    },
+    {
+      "NameOfTheDay":"Środa",
+      "IsActive":true
+    },
+    {
+      "NameOfTheDay":"Czwartek",
+      "IsActive":true
+    },
+    {
+      "NameOfTheDay":"Piątek",
+      "IsActive":true
+    },
+    {
+      "NameOfTheDay":"Sobota",
+      "IsActive":false
+    },
+    {
+      "NameOfTheDay":"Niedziela",
+      "IsActive":false
+    }
+  ],
+  "Statystyki":{
+    "ileBrakZajec":0,
+    "ileNieobecnosci":0,
+    "ileSpoznien":0,
+    "ileObecnosci":9001,
+    "ileUsprawiedliwien":0,
+    "ileZwolnien":0,
+    "ileFerii":0,
+    "ileWycieczek":0,
+    "ileZwolnionyObecny":0
+  }
+}

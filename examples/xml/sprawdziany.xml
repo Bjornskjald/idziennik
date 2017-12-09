@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <pobierzListeResponse xmlns="http://tempuri.org/">
+      <pobierzListeResult>
+        <ListK>
+          <sSprawdzianList>
+            <data>string</data>
+            <dzienTyg>string</dzienTyg>
+            <przedmiot>string</przedmiot>
+            <rodzaj>string</rodzaj>
+            <wpisal>string</wpisal>
+            <zakres>string</zakres>
+            <_recordId>int</_recordId>
+          </sSprawdzianList>
+          <sSprawdzianList>
+            <data>string</data>
+            <dzienTyg>string</dzienTyg>
+            <przedmiot>string</przedmiot>
+            <rodzaj>string</rodzaj>
+            <wpisal>string</wpisal>
+            <zakres>string</zakres>
+            <_recordId>int</_recordId>
+          </sSprawdzianList>
+        </ListK>
+        <Bledy>
+          <CzyJestBlad>boolean</CzyJestBlad>
+          <ListaBledow>
+            <string>string</string>
+            <string>string</string>
+          </ListaBledow>
+          <ListaKodowBledow>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+          </ListaKodowBledow>
+        </Bledy>
+        <Parametry>
+          <parametryFiltrow>
+            <sParametryFiltrow xsi:nil="true" />
+            <sParametryFiltrow xsi:nil="true" />
+          </parametryFiltrow>
+          <wierszeLegendy>
+            <sLegenda xsi:nil="true" />
+            <sLegenda xsi:nil="true" />
+          </wierszeLegendy>
+          <strona>int</strona>
+          <iloscNaStrone>int</iloscNaStrone>
+          <iloscRekordow>int</iloscRekordow>
+          <kolumnaSort />
+          <kierunekSort>int</kierunekSort>
+          <maxIloscZaznaczonych>int</maxIloscZaznaczonych>
+          <panelFiltrow>unsignedByte</panelFiltrow>
+        </Parametry>
+      </pobierzListeResult>
+    </pobierzListeResponse>
+  </soap12:Body>
+</soap12:Envelope>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <pobierzPodrecznikiResponse xmlns="http://tempuri.org/">
+      <pobierzPodrecznikiResult>
+        <ListK>
+          <sPodreczniki>
+            <_recordId>int</_recordId>
+            <Przedmiot>string</Przedmiot>
+            <Prowadzacy>string</Prowadzacy>
+            <Tytul>string</Tytul>
+            <Autor>string</Autor>
+            <Wydawnictwo>string</Wydawnictwo>
+          </sPodreczniki>
+          <sPodreczniki>
+            <_recordId>int</_recordId>
+            <Przedmiot>string</Przedmiot>
+            <Prowadzacy>string</Prowadzacy>
+            <Tytul>string</Tytul>
+            <Autor>string</Autor>
+            <Wydawnictwo>string</Wydawnictwo>
+          </sPodreczniki>
+        </ListK>
+        <Bledy>
+          <CzyJestBlad>boolean</CzyJestBlad>
+          <ListaBledow>
+            <string>string</string>
+            <string>string</string>
+          </ListaBledow>
+          <ListaKodowBledow>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+          </ListaKodowBledow>
+        </Bledy>
+        <Parametry>
+          <parametryFiltrow>
+            <sParametryFiltrow xsi:nil="true" />
+            <sParametryFiltrow xsi:nil="true" />
+          </parametryFiltrow>
+          <wierszeLegendy>
+            <sLegenda xsi:nil="true" />
+            <sLegenda xsi:nil="true" />
+          </wierszeLegendy>
+          <strona>int</strona>
+          <iloscNaStrone>int</iloscNaStrone>
+          <iloscRekordow>int</iloscRekordow>
+          <kolumnaSort />
+          <kierunekSort>int</kierunekSort>
+          <maxIloscZaznaczonych>int</maxIloscZaznaczonych>
+          <panelFiltrow>unsignedByte</panelFiltrow>
+        </Parametry>
+      </pobierzPodrecznikiResult>
+    </pobierzPodrecznikiResponse>
+  </soap12:Body>
+</soap12:Envelope>

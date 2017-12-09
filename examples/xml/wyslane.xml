@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<soap12:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://www.w3.org/2003/05/soap-envelope">
+  <soap12:Body>
+    <PobierzListeWiadomosciResponse xmlns="http://tempuri.org/">
+      <PobierzListeWiadomosciResult>
+        <ListK>
+          <sWiadomosci>
+            <_recordId>string</_recordId>
+            <Nadawca>string</Nadawca>
+            <Tytul>string</Tytul>
+            <DataNadania>string</DataNadania>
+            <_idNadawcy>string</_idNadawcy>
+            <_idNadawcyJedn>string</_idNadawcyJedn>
+            <_customStyle>string</_customStyle>
+          </sWiadomosci>
+          <sWiadomosci>
+            <_recordId>string</_recordId>
+            <Nadawca>string</Nadawca>
+            <Tytul>string</Tytul>
+            <DataNadania>string</DataNadania>
+            <_idNadawcy>string</_idNadawcy>
+            <_idNadawcyJedn>string</_idNadawcyJedn>
+            <_customStyle>string</_customStyle>
+          </sWiadomosci>
+        </ListK>
+        <Bledy>
+          <CzyJestBlad>boolean</CzyJestBlad>
+          <ListaBledow>
+            <string>string</string>
+            <string>string</string>
+          </ListaBledow>
+          <ListaKodowBledow>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+            <KodBledu>Nieokreslony or NauczycielJestPrzypisanyDoZajec or CzesciowoNiezaimportowane</KodBledu>
+          </ListaKodowBledow>
+        </Bledy>
+        <Parametry>
+          <parametryFiltrow>
+            <sParametryFiltrow xsi:nil="true" />
+            <sParametryFiltrow xsi:nil="true" />
+          </parametryFiltrow>
+          <wierszeLegendy>
+            <sLegenda xsi:nil="true" />
+            <sLegenda xsi:nil="true" />
+          </wierszeLegendy>
+          <strona>int</strona>
+          <iloscNaStrone>int</iloscNaStrone>
+          <iloscRekordow>int</iloscRekordow>
+          <kolumnaSort />
+          <kierunekSort>int</kierunekSort>
+          <maxIloscZaznaczonych>int</maxIloscZaznaczonych>
+          <panelFiltrow>unsignedByte</panelFiltrow>
+        </Parametry>
+      </PobierzListeWiadomosciResult>
+    </PobierzListeWiadomosciResponse>
+  </soap12:Body>
+</soap12:Envelope>

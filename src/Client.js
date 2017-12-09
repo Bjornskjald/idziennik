@@ -183,6 +183,14 @@ module.exports = function Client (name, agent, id, hash) {
   this.podreczniki = require('./client/podreczniki')
 
   /**
+   * Funkcja kasująca wiadomość z listy wiadomości
+   * @function
+   * @memberof Client
+   * @returns {object} Obiekt z danymi pobranymi z API
+   */
+  this.skasujWiadomosc = require('./client/skasujWiadomosc')
+  
+  /**
    * Funkcja zwracająca hash hasła użytkownika
    * @function
    * @memberof Client
