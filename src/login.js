@@ -10,8 +10,8 @@ const cryptojs = require('crypto-js')
  */
 const crypto = require('../utils/crypto')
 
-/** Moduł iDziennik używa superagent jako klienta HTTP(S) (zmiana z request-promise-native) */
-const request = require('superagent')
+/** Moduł iDziennik używa superagent jako klienta HTTP(S) */
+const agent = require('superagent/superagent')
 
 module.exports = params => {
   // {name, pass, hash, debug}
@@ -19,8 +19,6 @@ module.exports = params => {
     var debug = msg => { if (params.debug) console.log(msg) }
 
     debug('Pobieram ciastko...')
-
-    var agent = request.agent()
 
     var token
 
