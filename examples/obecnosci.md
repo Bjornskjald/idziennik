@@ -2,6 +2,7 @@
 
 ## Parametry:
 - date : Date
+- week : boolean (czy pobierać tylko obecny tydzień?)
 
 ## Zwraca:
 - [JSON](json/obecnosci.json)
