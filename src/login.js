@@ -79,7 +79,7 @@ module.exports = params => {
       .get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
     }).then(response => {
       debug('Stage 4')
-      if (response.request.url === 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx' && !response.text.includes('Working...')) {
+      if (response.req.url === 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx' && !response.text.includes('Working...')) {
         resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase() + params.password).toString(cryptojs.enc.Hex)})
       }
       try {
@@ -93,8 +93,8 @@ module.exports = params => {
       .send({wa: 'wsignin1.0', wresult: wres, wctx: 'rm=0&amp;id=passive&amp;ru=%2fmod_panelRodzica%2fOceny.aspx'})
     }).then(response => {
       debug('Stage 5')
-      debug(response.request.url)
-      if (response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx') {
+      debug(response.req.url)
+      if (response.req.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx') {
         /* throw new Error('Failed on scraping main page.')
         return */
         return agent.get('https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx')
@@ -102,8 +102,8 @@ module.exports = params => {
       debug('Skończyłem pobierać ciastko')
       resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase() + params.password).toString(cryptojs.enc.Hex)})
     }).then(response => {
-      if (response.request.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx') {
-        throw new Error('Failed on scraping main page. (' + response.request.url + ')')
+      if (response.req.url !== 'https://iuczniowie.pe.szczecin.pl/mod_panelRodzica/Oceny.aspx') {
+        throw new Error('Failed on scraping main page. (' + response.req.url + ')')
       }
       resolve({agent: agent, id: response.text.split('selected="selected" value="')[1].split('">')[0], hash: cryptojs.MD5(params.username.toLowerCase() + params.password).toString(cryptojs.enc.Hex)})
     }).catch(err => {
